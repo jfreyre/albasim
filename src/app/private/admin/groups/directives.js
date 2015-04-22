@@ -5,11 +5,11 @@ angular.module('private.admin.groups.directives', [])
             controller: "AdminGroupsIndexController as adminGroupsIndexCtrl"
         };
     })
-    .controller("AdminGroupsIndexController", function AdminGroupsIndexController($rootScope, Flash, UsersModel) {
+    .controller("AdminGroupsIndexController", function AdminGroupsIndexController($rootScope, Flash, GroupsModel) {
         var ctrl = this;
         ctrl.groups = [];
         ctrl.updateGroups = function(){
-            UsersModel.getGroups().then(function(response){
+            GroupsModel.getGroups().then(function(response){
                 if(!response.isErroneous()){
                     ctrl.groups = response.data;
                 }else{
