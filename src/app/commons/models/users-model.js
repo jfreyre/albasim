@@ -2,7 +2,8 @@
 angular.module('wegas.models.users', [])
     .service('UsersModel', function($http, $q, Responses) {
         var model = this,
-            users;
+            users,
+            roles = null;
 
         model.getUsers = function() {
             return "Here is all users";
@@ -92,6 +93,38 @@ angular.module('wegas.models.users', [])
                 }).error(function(data) {
                     deferred.resolve([]);
                 });
+            return deferred.promise;
+        }
+
+
+        model.getGroups = function() {
+            var deferred = $q.defer();
+            if(roles == null){
+                var url = "rest/Role";
+
+                $http.get(ServiceURL + url, {
+                    "headers": {
+                        "managed-mode": "true"
+                    }
+                }).success(function(data) {
+                    if (data.events !== undefined && data.events.length == 0) {
+                        roles = data.entities;
+                        deferred.resolve(Responses.success("Profile loaded", roles));
+                    } else if (data.events !== undefined) {
+                        deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                    } else {
+                        deferred.resolve(Responses.danger("Error during groups loading", false));
+                    }
+                }).error(function(data) {
+                    if (data.events !== undefined && data.events.length > 0) {
+                        deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                    } else {
+                        deferred.resolve(Responses.danger("Error during groups loading", false));
+                    }
+                });
+            }else{
+                deferred.resolve(Responses.success("Groups loaded", roles));
+            }
             return deferred.promise;
         }
     });
