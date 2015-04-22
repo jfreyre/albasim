@@ -113,12 +113,13 @@ label.choice{
         }
 
         input[type="radio"]:checked + .choice__box__display{ 
-            border:solid 9px $border;
+            border:solid 9px lighten($primary-color, 10%);
             transition:.3s;
         } 
     }
     .choice__label{
         height:24px;
+        margin-left:2px;
         font-size:14px;
         line-height: 24px;
         width:auto;
