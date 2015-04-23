@@ -1,10 +1,10 @@
 'use strict';
 angular.module('wegas.models.users', [])
-    .service('UsersModel', function(Auth, $http, $q, Responses) {
+    .service('UsersModel', function(Auth, $http, $q, $interval, Responses) {
         var model = this,
             users = {
                 cache: null,
-                findUser: function( id) {
+                findUser: function(id) {
                     return _.find(users.cache.data, function(s) {
                         return s.id == id;
                     });
@@ -12,7 +12,7 @@ angular.module('wegas.models.users', [])
                 stopWaiting: function(waitFunction) {
                     $interval.cancel(waitFunction);
                 },
-                wait: function(status) {
+                wait: function() {
                     var deferred = $q.defer(),
                         waitUsers = $interval(function() {
                             if (!users.cache.loading) {
@@ -126,6 +126,40 @@ angular.module('wegas.models.users', [])
 
 
         model.getUser = function(id) {
+            var deferred = $q.defer(),
+                user = null;
+            if (users.cache) {
+                if (users.cache.loading) {
+                    users.wait().then(function() {
+                        user = users.findUser(id);
+                        if (user) {
+                            deferred.resolve(Responses.success("User find", user));
+                        } else {
+                            deferred.resolve(Responses.danger("No user find", false));
+                        }
+                    });
+                } else {
+                    user = users.findUser(id);
+                    if (user) {
+                        deferred.resolve(Responses.success("User find", user));
+                    } else {
+                        deferred.resolve(Responses.danger("No user find", false));
+                    }
+                }
+            } else {
+                model.getUsers().then(function() {
+                    user = users.findUser(id);
+                    if (user) {
+                        deferred.resolve(Responses.success("User find", user));
+                    } else {
+                        deferred.resolve(Responses.danger("No user find", false));
+                    }
+                });
+            }
+            return deferred.promise;
+        }
+
+        model.getFullUser = function(id) {
             var deferred = $q.defer();
 
             if (isNaN(id)) {
@@ -133,15 +167,16 @@ angular.module('wegas.models.users', [])
                 return;
             }
 
-            var url = "rest/Extended/User/Account/" + id;
-
+            var url = "rest/Extended/User/" + id + "?view=EditorExtended";
             $http.get(ServiceURL + url, {
                 "headers": {
                     "managed-mode": "true"
                 }
             }).success(function(data) {
                 if (data.events !== undefined && data.events.length == 0) {
-                    deferred.resolve(Responses.success("Profile loaded", data.entities[0]));
+
+                    data.entities[0].account = data.entities[0].accounts[0];
+                    deferred.resolve(Responses.success("Full Profile loaded", data.entities[0]));
                 } else if (data.events !== undefined) {
                     deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
                 } else {
@@ -156,7 +191,6 @@ angular.module('wegas.models.users', [])
             });
             return deferred.promise;
         }
-
         model.updateUser = function(user) {
 
             var deferred = $q.defer();
