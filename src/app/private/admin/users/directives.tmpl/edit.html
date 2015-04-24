@@ -7,7 +7,7 @@
     </a>
 </div>
 
-<div class="modal__content modal__content--nav-off">
+<div class="modal__content modal__content--nav-off modal__content--nav-tools-off">
 
     <h2>Edit</h2>
 
@@ -25,26 +25,29 @@
             <input class="input" type="text" ng-model="user.account.username" placeholder="Please enter user username" autocomplete="off">
         </div>
         <div class="form__row">
-            <input class="input" type="password" ng-model="user.password" placeholder="Password" autocomplete="off">
+            <input class="input" type="password" ng-model="user.account.password" placeholder="Password" autocomplete="off">
         </div>
         <div class="form__row">
-            <input class="input" type="password" ng-model="user.password2" placeholder="Confirm password" autocomplete="off">
+            <input class="input" type="password" ng-model="user.account.password2" placeholder="Confirm password" autocomplete="off">
         </div>
         <div class="form__row">
             <hr/>
         </div>
 
-        <admin-user-roles user="user" />
+        <admin-user-roles user="user"></admin-user-roles>
 
+        <div class="form__row">
+            <hr/>
         </div>
+
+        <div class="form__row form__row--right">
+            <a class="button button--small button--add">
+                <span class="button__label" ng-click="save()">Save</span>
+            </a>
+        </div>
+
+
+
     </form>
-
-</div>
-
-<div class="modal__tools">
-
-    <a class="button button--small button--add">
-        <span class="button__label" ng-click="save()">Save</span>
-    </a>
 
 </div>
