@@ -47,6 +47,15 @@ angular.module('private.admin.users.directives', [
 
         $scope.deleteUser = function(id) {
             console.info('Will remove user')
+            UsersModel.getUser(id).then(function(response) {
+                if (!response.isErroneous()) {
+                    var user = response.data;
+                    UsersModel.deleteUser(user).then(function (response) {
+                        response.flash();
+                        ctrl.updateUsersList();
+                    });
+                }
+            });
         };
 
         $rootScope.$on('changeLimit', function(e, hasNewData) {
@@ -76,6 +85,13 @@ angular.module('private.admin.users.directives', [
                         scope.user = response.data;
                     }
                 });
+                scope.save = function () {
+                    UsersModel.updateUser(scope.user.account).then(function (response) {
+                        if (!response.isErroneous()) {
+                            response.flash();
+                        }
+                    });
+                }
             }
         }
     })
@@ -110,8 +126,6 @@ angular.module('private.admin.users.directives', [
                 user: '='
             },
             link: function(scope, element, attrs, parentCtrl) {
-                scope.selectedRole = scope.currentRole;
-
                 RolesModel.getRoles().then(function(response) {
                     if (!response.isErroneous()) {
                         scope.roles = response.data;
@@ -119,6 +133,19 @@ angular.module('private.admin.users.directives', [
                         response.flash();
                     }
                 });
+
+                scope.selectedRole = scope.currentRole;
+
+                // Updating user roles when user select another role in the list
+                scope.$watch('selectedRole', function() {
+                    var index = scope.user.account.roles.indexOf(scope.currentRole);
+                    if (index > -1) {
+                        scope.user.account.roles[index] = scope.selectedRole;
+                        scope.currentRole = scope.selectedRole;
+                    }
+
+                });
+
 
                 scope.removeRole = function() {
                     scope.user.account.roles = _(scope.user.account.roles).filter(function (r) {
