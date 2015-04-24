@@ -9,6 +9,7 @@ angular.module('wegas.models.users', [])
                         return s.id == id;
                     });
                 },
+
                 stopWaiting: function(waitFunction) {
                     $interval.cancel(waitFunction);
                 },
@@ -228,6 +229,38 @@ angular.module('wegas.models.users', [])
             return deferred.promise;
         };
 
+        model.deleteUser = function(user) {
+            var deferred = $q.defer();
+
+            var url = "rest/Extended/User/Account/" + user.account.id;
+
+            $http
+                .delete(ServiceURL + url, {
+                    "headers": {
+                        "managed-mode": "true"
+                    }
+                })
+                .success(function(data) {
+                    if (data.events !== undefined && data.events.length == 0) {
+
+                        users.cache.data = uncacheUser(user);
+                        deferred.resolve(Responses.success("User deleted", data.entities));
+                    } else if (data.events !== undefined) {
+                        deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                    } else {
+                        deferred.resolve(Responses.danger("Whoops...", false));
+                    }
+                }).error(function(data) {
+                    if (data.events !== undefined && data.events.length > 0) {
+                        deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                    } else {
+                        deferred.resolve(Responses.danger("Whoops...", false));
+                    }
+                });
+
+
+            return deferred.promise;
+        }
         /* Find user with a pattern in a list of groups (Player, Trainer, Scenarist, Administrator) */
         model.autocomplete = function(pattern, rolesList) {
             var deferred = $q.defer();
