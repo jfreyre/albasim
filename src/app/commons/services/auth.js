@@ -50,24 +50,39 @@ angular.module('wegas.service.auth', [
 
         service.login = function(login, password) {
             var deferred = $q.defer();
-            var AuthenticationInformation = {
+            var url = "rest/User/Authenticate";
+            $http.post(ServiceURL + url, {
                 "@class": "AuthenticationInformation",
                 "login": login,
                 "password": password,
                 "remember": true
-            }
-            $http.post(ServiceURL + "rest/User/Authenticate", AuthenticationInformation).success(function(data) {
-                deferred.resolve(true);
-                service.getAuthenticatedUser();
+            }, {
+                "headers": {
+                    "managed-mode": "true"
+                }
+            }).success(function(data) {
+                if (data.events !== undefined && data.events.length == 0) {
+                    deferred.resolve(Responses.success("You are connected", true));
+                    service.getAuthenticatedUser();
+                } else if (data.events !== undefined) {
+                    deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                } else {
+                    deferred.resolve(Responses.danger("Whoops...", false));
+                }
+
             }).error(function(data) {
-                deferred.resolve(false);
+                if (data.events !== undefined && data.events.length > 0) {
+                    deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                } else {
+                    deferred.resolve(Responses.danger("Whoops...", false));
+                }
             });
             return deferred.promise;
         };
 
         service.logout = function() {
             var deferred = $q.defer();
-            $http.get(ServiceURL + "rest/User/Logout").success(function(data) {
+            $http.get(ServiceURL + "logout").success(function(data) {
                 authenticatedUser = null;
                 deferred.resolve(Responses.success("Logout successfully", true));
             }).error(function(data) {
