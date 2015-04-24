@@ -1,0 +1,6 @@
+<div class="form__row">
+    <button ng-click="removeRole()">-</button>
+    <select ng-model="selectedRole" ng-options="role.name for role in roles track by role.id">
+    <option>Please select a role</option>
+    </select>
+</div>
