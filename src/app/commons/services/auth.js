@@ -72,19 +72,33 @@ angular.module('wegas.service.auth', [
             return deferred.promise;
         };
 
-        service.signup = function (email, password) {
-            var obj = {
-                "@class"    : "JpaAccount",
-                "email"     : email,
-                "password"  : password
-            }
+        service.signup = function(email, username, password) {
+
             var deferred = $q.defer();
-            $http.post(ServiceURL + "rest/User/Signup",obj)
-            .success(function (data){
-                deferred.resolve(true);
-            })
-            .error(function (data) {
-                deferred.resolve(data);
+            var url = "rest/User/Signup";
+            $http.post(ServiceURL + url, {
+                "@class": "JpaAccount",
+                "email": email,
+                "username": username,
+                "password": password
+            }, {
+                "headers": {
+                    "managed-mode": "true"
+                }
+            }).success(function(data) {
+                if (data.events !== undefined && data.events.length == 0) {
+                    deferred.resolve(Responses.success("You are registered", true));
+                } else if (data.events !== undefined) {
+                    deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                } else {
+                    deferred.resolve(Responses.danger("Whoops...", false));
+                }
+            }).error(function(data) {
+                if (data.events !== undefined && data.events.length > 0) {
+                    deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                } else {
+                    deferred.resolve(Responses.danger("Whoops...", false));
+                }
             });
             return deferred.promise;
         };
