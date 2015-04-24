@@ -15,7 +15,7 @@ angular
                             if (response.isErroneous()) {
                                 response.flash();
                             } else {
-                                $scope.user = response.data;
+                                $scope.user = response.data.account;
                                 if ($scope.originalUser === false) {
                                     $scope.originalUsername = $scope.user.lastname + ' ' + $scope.user.firstname;
                                 }
