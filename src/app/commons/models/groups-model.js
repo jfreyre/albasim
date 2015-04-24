@@ -5,7 +5,7 @@ angular.module('wegas.models.groups', [])
             groups = null,
             loadingGroups = false;
             /* Cache all scenarios in a list */
-            cacheGroups = function() {
+            cacheGroups = function(){
                 var deferred = $q.defer(),
                 	url = "rest/Role";
                 
@@ -30,6 +30,24 @@ angular.module('wegas.models.groups', [])
                     }
                 });
                 return deferred.promise;
+            },
+            findGroup =  function(id) {
+                return _.find(groups, function(g) {
+                    return g.id == id;
+                });
+            },
+            stopWaiting = function(waitFunction) {
+                $interval.cancel(waitFunction);
+            },
+            wait = function() {
+                var deferred = $q.defer(),
+                    waitGroups = $interval(function() {
+                        if (!loadingGroups) {
+                            stopWaiting(waitGroups);
+                            deferred.resolve(true)
+                        }
+                    }, 500);
+                return deferred.promise;
             };
 
         model.getGroups = function() {
@@ -40,12 +58,18 @@ angular.module('wegas.models.groups', [])
 			            if (groups != null) {
 			                deferred.resolve(Responses.success("Groups loaded", groups));		                
 			            } else {
-			            	loadingGroups = true;
-			            	cacheGroups().then(function(){
-			            		loadingGroups = false;
-			                	deferred.resolve(Responses.success("Groups loaded", groups));		                
-			            	});
-			            }
+                            if(loadingGroups == true){
+                                wait().then(function(){
+                                    deferred.resolve(Responses.success("Groups loaded", groups));                       
+                                });
+                            }else{
+                                loadingGroups = true;
+                                cacheGroups().then(function(response){
+                                    loadingGroups = false;
+                                    deferred.resolve(response);                       
+                                });
+                            }
+			            }    
 		        	}else{
 	                	deferred.resolve(Responses.success("You need to be admin", false));
 		        	}
@@ -53,6 +77,41 @@ angular.module('wegas.models.groups', [])
 	                deferred.resolve(Responses.success("You need to be logged", false));
 	            }
 	        });
+            return deferred.promise;
+        };
+
+        /* Ask for one managed session. */
+        model.getGroup = function(id) {
+            var deferred = $q.defer(),
+                group = undefined;
+            if (groups == null) {
+                if (loadingGroups) {
+                    wait().then(function() {
+                        group = findGroup(id);
+                        if (group) {
+                            deferred.resolve(Responses.success("Group find", group));
+                        } else {
+                            deferred.resolve(Responses.danger("No group find", false));
+                        }
+                    });
+                } else {
+                    model.getGroups().then(function() {
+                        group = findGroup(id);
+                        if (group) {
+                            deferred.resolve(Responses.success("Group find", group));
+                        } else {
+                            deferred.resolve(Responses.danger("No group find", false));
+                        }
+                    });
+                }
+            } else {
+                group = findGroup(id);
+                if (group) {
+                    deferred.resolve(Responses.success("Group find", group));
+                } else {
+                    deferred.resolve(Responses.danger("No group find", false));
+                }
+            }
             return deferred.promise;
         };
     });

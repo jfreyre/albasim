@@ -8,9 +8,7 @@ angular.module('private.admin.users.directives', [
         };
     })
     .controller("AdminUsersIndexController", function AdminUsersIndexController($scope, $rootScope, Flash, UsersModel) {
-        var ctrl = this;
-        $scope.maxUsersDisplayed = null;
-        $scope.users = [];
+        var ctrl = this,
         initMaxUsersDisplayed = function() {
             if ($scope.users.length > 12) {
                 $scope.maxUsersDisplayed = 10;
@@ -18,6 +16,8 @@ angular.module('private.admin.users.directives', [
                 $scope.maxUsersDisplayed = $scope.users.length;
             }
         };
+        $scope.maxUsersDisplayed = null;
+        $scope.users = [];
 
         ctrl.updateDisplay = function() {
             if ($scope.maxUsersDisplayed == null) {
@@ -42,11 +42,8 @@ angular.module('private.admin.users.directives', [
                 }
             });
         };
-        ctrl.updateDisplay();
-        ctrl.updateUsersList();
 
         $scope.deleteUser = function(id) {
-            console.info('Will remove user')
             UsersModel.getUser(id).then(function(response) {
                 if (!response.isErroneous()) {
                     var user = response.data;
@@ -64,6 +61,8 @@ angular.module('private.admin.users.directives', [
             }
         });
 
+        ctrl.updateDisplay();
+        ctrl.updateUsersList();
     })
     .directive('adminUsersList', function(Flash) {
         return {
@@ -75,7 +74,7 @@ angular.module('private.admin.users.directives', [
             }
         };
     })
-    .directive('adminEditUserForm', function(UsersModel, RolesModel, $stateParams) {
+    .directive('adminEditUserForm', function(UsersModel, $stateParams) {
         return {
             templateUrl: 'app/private/admin/users/directives.tmpl/edit.html',
             link: function(scope, element, attrs, parentCtrl) {
@@ -95,49 +94,52 @@ angular.module('private.admin.users.directives', [
             }
         }
     })
-    .directive('adminUserRoles', function(RolesModel) {
+    .directive('adminUserGroups', function(GroupsModel) {
         return {
-            templateUrl: "app/private/admin/users/directives.tmpl/roles.html",
+            templateUrl: "app/private/admin/users/directives.tmpl/groups.html",
             scope: {
                 user: '='
             },
-            link: function(scope, element, attrs, parentCtrl) {
-                RolesModel.getRoles().then(function(response) {
+            link: function(scope, element, attrs) {
+                GroupsModel.getGroups().then(function(response) {
+                    console.log(response);
                     if (!response.isErroneous()) {
-                        scope.roles = response.data;
+                        console.log(scope.groups);
+                        scope.groups = response.data;
                     } else {
                         response.flash();
                     }
                 });
 
                 // Create a new
-                scope.addARole = function() {
-                    var new_role = angular.copy(this.roles[0])
-                    scope.user.account.roles.push(new_role);
+                scope.addGroup = function() {
+                    console.log("Add");
+                    var new_group = angular.copy(scope.groups[0])
+                    scope.user.account.roles.push(new_group);
                 }
             }
         }
     })
-    .directive('adminUserRole', function(RolesModel) {
+    .directive('adminUserGroup', function(GroupsModel) {
         return {
-            templateUrl: "app/private/admin/users/directives.tmpl/role.html",
+            templateUrl: "app/private/admin/users/directives.tmpl/group.html",
             scope: {
-                currentRole: '=',
+                currentGroup: '=',
                 user: '='
             },
             link: function(scope, element, attrs, parentCtrl) {
-                RolesModel.getRoles().then(function(response) {
+                GroupsModel.getGroups().then(function(response) {
                     if (!response.isErroneous()) {
-                        scope.roles = response.data;
+                        scope.groups = response.data;
                     } else {
                         response.flash();
                     }
                 });
 
-                scope.selectedRole = scope.currentRole;
+                scope.selectedGroup = scope.currentGroup;
 
-                // Updating user roles when user select another role in the list
-                scope.$watch('selectedRole', function() {
+                // Updating user groups when user select another role in the list
+                scope.$watch('selectedGroup', function() {
                     var index = scope.user.account.roles.indexOf(scope.currentRole);
                     if (index > -1) {
                         scope.user.account.roles[index] = scope.selectedRole;
@@ -145,7 +147,6 @@ angular.module('private.admin.users.directives', [
                     }
 
                 });
-
 
                 scope.removeRole = function() {
                     scope.user.account.roles = _(scope.user.account.roles).filter(function (r) {
