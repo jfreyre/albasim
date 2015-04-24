@@ -34,6 +34,10 @@ angular.module('private.directives', [
                         profileState = "wegas.private.profile.trainer";
                     } else if ($state.current.name == "wegas.private.player") {
                         profileState = "wegas.private.profile.player";
+                    } else if ($state.current.name == "wegas.private.admin") {
+                        profileState = "wegas.private.profile.admin";
+                    } else if ($state.current.name == "wegas.private.admin.users") {
+                        profileState = "wegas.private.profile.admin.users";
                     } else {
                         profileState = "wegas.private.profile";
                     }
