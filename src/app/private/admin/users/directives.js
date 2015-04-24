@@ -121,12 +121,9 @@ angular.module('private.admin.users.directives', [
                 });
 
                 scope.removeRole = function() {
-                    console.info('Removing roles');
-                    scope.user.account.roles = _.without(scope.user.account.roles,
-                        _.where(scope.user.account.roles, {
-                            id: this.selectedRole.id
-                        })
-                    );
+                    scope.user.account.roles = _(scope.user.account.roles).filter(function (r) {
+                        return r.id != scope.selectedRole.id
+                    });
                 }
             }
         }
