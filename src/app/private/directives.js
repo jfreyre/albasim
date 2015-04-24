@@ -53,9 +53,14 @@ angular.module('private.directives', [
                     var $menuToggler = $('#menu-toggler');
                     var $labelMenuToggler = $('label[for="menu-toggler"]');
                     // if element is opened and click target is outside it, hide it
-                    if ($menuToggler.is(':checked') && !$menu.is(e.target) && !$labelMenuToggler.is(e.target)) {
-                        $menuToggler.trigger('click');
+                    if ($menuToggler.is(':checked')) {
+                        if ($menu.is(e.target) || $menuToggler.is(e.target) || $labelMenuToggler.is(e.target)) {
+                            return;
+                        } else {
+                            $menuToggler.trigger('click');
+                        }
                     }
+                    return;
                 });
             }
         };
