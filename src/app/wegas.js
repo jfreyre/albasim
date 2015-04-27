@@ -42,10 +42,7 @@ angular.module('Wegas', [
     	if(user == null){
     		$state.go("wegas.public");
     	}else{
-    		if(user.isScenarist){
-	    		$state.go("wegas.private.scenarist");
-    		}else{
-    			if(user.isTrainer){
+    		if(user.isScenarist || user.isTrainer){
 	    			$state.go("wegas.private.trainer");
 	    		}else{
 	    			$state.go("wegas.private.player");
