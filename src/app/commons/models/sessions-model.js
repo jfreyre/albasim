@@ -145,16 +145,30 @@ angular.module('wegas.models.sessions', [])
                 var deferred = $q.defer();
                 sessions.findSession(sessionsListName, id).then(function(session) {
                     if (session) {
-                        if (session.trainers) {
-                            deferred.resolve(session);
-                        } else {
-                            $http.get(ServiceURL + "rest/Extended/User/FindAccountPermissionByInstance/g" + session.id).success(function(data) {
-                                session.trainers = data;
-                                deferred.resolve(session);
-                            }).error(function(data) {
-                                deferred.resolve(false);
+                        $http.get(ServiceURL + "rest/Extended/User/FindAccountPermissionByInstance/g" + session.id).success(function(data) {
+                            session.trainers = [];
+
+                            _(data).each(function(account, i) {
+                                var permissions = [],
+                                    pattern = new RegExp("^Game:(.*):g"+id+"$");
+
+                                // For each permission of each account...
+                                _(account.permissions).each(function(permission, j) {
+                                    // Is permission linked with current game ?
+                                    if (pattern.test(permission.value)) {
+                                        var localPermission = permission.value.match(pattern)[1].split(",");
+                                        permissions = permissions.merge(localPermission)
+                                    }
+                                });
+                                if (permissions.indexOf("View") >= 0 && permissions.indexOf("Edit") >= 0) {
+                                    session.trainers.push(account);
+                                }
                             });
-                        }
+                            // session.trainers = data;
+                            deferred.resolve(session);
+                        }).error(function(data) {
+                            deferred.resolve(false);
+                        });
                     } else {
                         deferred.resolve(false);
                     }
@@ -211,6 +225,7 @@ angular.module('wegas.models.sessions', [])
                 }
                 return session;
             },
+
 
     /* Update status of session (OPENED, LIVE, BIN, DELETE, SUPPRESSED) */
     setSessionStatus = function(sessionId, status) {
