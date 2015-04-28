@@ -384,6 +384,31 @@ angular.module('wegas.models.sessions', [])
             sessions.cache = [];
         };
 
+        model.refreshSession = function (listname, session) {
+            var deferred = $q.defer();
+
+            var url = "rest/GameModel/Game/" + session.id + "?view=EditorExtended";
+            $http
+            .get(ServiceURL + url)
+            .success(function (data) {
+                // Removing old session
+                sessions.cache[listname].data = uncacheSession(sessions.cache[listname].data, session);
+                // Creating new one
+                sessions.cache[listname].data = cacheSession(sessions.cache[listname].data, data, false);
+
+                sessions.findSession(listname, data.id, true).then(function(response) {
+                    deferred.resolve(Responses.success("Session refreshed", response));
+                });
+
+            }).error(function(data) {
+                deferred.resolve(Responses.danger("Whoops", false));
+            });
+
+
+
+            return deferred.promise;
+        };
+
         /* Remove player form persistante datas and change cached datas (Used from trainer and player workspace) */
         model.removePlayerToSession = function(sessionId, playerId, teamId) {
             var deferred = $q.defer();
