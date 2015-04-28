@@ -43,11 +43,10 @@ angular.module('Wegas', [
     		$state.go("wegas.public");
     	}else{
     		if(user.isScenarist || user.isTrainer){
-	    			$state.go("wegas.private.trainer");
-	    		}else{
-	    			$state.go("wegas.private.player");
-	    		}
-    		}
+                        $state.go("wegas.private.trainer");
+                }else{
+                        $state.go("wegas.private.player");
+                }
     	}
     });
 });
