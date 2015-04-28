@@ -92,7 +92,7 @@ angular.module('wegas.service.auth', [
             return deferred.promise;
         };
 
-        service.signup = function(email, username, password) {
+        service.signup = function(email, username, password, firstname, lastname) {
 
             var deferred = $q.defer();
             var url = "rest/User/Signup";
@@ -100,7 +100,9 @@ angular.module('wegas.service.auth', [
                 "@class": "JpaAccount",
                 "email": email,
                 "username": username,
-                "password": password
+                "password": password,
+                "firstname": firstname,
+                "lastname": lastname
             }).success(function(data) {
                 deferred.resolve(Responses.success("You are registered", true));
             }).error(function(data) {

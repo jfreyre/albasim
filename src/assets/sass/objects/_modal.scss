@@ -15,6 +15,25 @@
 	overflow-y:auto;
 	transition:.5s;
 
+	&.modal--public-password{
+		width:360px;
+		height:210px;
+		margin: -140px 0px 0px -180px;
+
+	}
+	&.modal--public-signup{
+		width:400px;
+		height:540px;
+		margin: -270px 0px 0px -200px;
+		.form{
+			margin-top:8px;
+		}
+		.form__row{
+			margin:8px 4px;
+		}
+
+	}
+
 	&.modal--users {
 		.modal__tools {
 			a.button {
