@@ -15,6 +15,14 @@
 	overflow-y:auto;
 	transition:.5s;
 
+	&.modal--users {
+		.modal__tools {
+			a.button {
+				float: right;
+				margin-top: 8px;
+			}
+		}
+	}
 	&.modal--history {
 		height: 580px;
 		margin-top: -290px;
