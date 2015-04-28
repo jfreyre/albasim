@@ -25,7 +25,9 @@ $buttons-icon : (
     (lock, $fa-var-lock),
     (unlock, $fa-var-unlock),
     (valid, $fa-var-check),
-    (admin, $fa-var-gavel)
+    (admin, $fa-var-gavel),
+    (refresh, $fa-var-refresh),
+
 );
 
 %button--with-icon{
