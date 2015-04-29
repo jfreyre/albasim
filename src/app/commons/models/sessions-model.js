@@ -73,7 +73,7 @@ angular.module('wegas.models.sessions', [])
                 if (!session.properties.freeForAll) {
                     var teams = session.teams;
                     teams.forEach(function(team) {
-                        if (team["@class"] == "DebugTeam" || team.players.length < 1) {
+                        if (team["@class"] == "DebugTeam") {
                             session.teams = _.without(session.teams, _.findWhere(session.teams, {
                                 id: team.id
                             }));

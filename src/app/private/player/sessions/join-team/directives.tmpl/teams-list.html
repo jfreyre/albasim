@@ -9,7 +9,7 @@
 	    </div>
 	</div>
 	<div class="card__actions">
-	    <a class="button button--small button--default-reverse button--label-hover-left button--eye" >
+	    <a class="button button--small button--default-reverse button--label-off button--eye" title="Show player">
 	      <span class="button__label">Show players</span>
 	    </a> 
 	    <a class="button button--small button--info button--user-plus" ng-click="joinTeam(team.id)">
@@ -17,4 +17,4 @@
 	    </a>   
 	</div>
 </div>
-<p ng-if="teams.length < 1">No team found</p>
+<p ng-if="teams.length < 1">No team created yet. Please, create a team.</p>
