@@ -159,8 +159,6 @@
                 transition-delay:.3s;
             }
 
-
-
             &.view__list--no-content{
                 padding:8px 0px 32px 0px;
             }
@@ -279,6 +277,7 @@
         display:block;
         position:relative;        
         text-align:left;
+        margin-top:64px;
         color:$white;
         @include make-sm-column(8);
         @include make-sm-column-offset(2);
@@ -395,8 +394,14 @@
     }
     .view__logo-albasim{
         display:block;
+        position:absolute;
+        top:-110px;
+        left:0px;
         width:120px;
         height:120px;
+        background-size:100%;
+        -webkit-filter: drop-shadow(0 1px 3px rgba(0,0,0,0.12));
+        filter:         drop-shadow(0 1px 3px rgba(0,0,0,0.12)); 
         background-image:url("../images/albasim_logo.png");
     }
 
