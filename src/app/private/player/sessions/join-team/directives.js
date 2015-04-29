@@ -38,6 +38,7 @@ angular.module('private.player.session.join.directives', [])
                     SessionsModel.createTeam(ctrl.sessionToJoin, ctrl.newTeam.name).then(function(responseCreate){
                         if(!responseCreate.isErroneous()){
                             $rootScope.$emit('newSession', true);
+                            ctrl.newTeam = false;
                         }else{
                             responseCreate.flash();
                         }
