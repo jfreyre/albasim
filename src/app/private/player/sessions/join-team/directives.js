@@ -106,4 +106,25 @@ angular.module('private.player.session.join.directives', [])
             });
         }
     };
+})
+.directive('playerSessionTeam', function(){
+    return {
+        templateUrl: 'app/private/player/sessions/join-team/directives.tmpl/team-card.html',
+        scope: {
+            team: "=",
+            joinTeam: "="
+        },
+        link: function(scope, elem, attrs){
+            scope.showPlayers = false;
+            scope.titleShowPlayers = "Show players";
+            scope.tooglePlayersVisibility = function(){
+                scope.showPlayers = !scope.showPlayers;
+                if(scope.showPlayers){
+                    scope.titleShowPlayers = "Hide players";
+                }else{
+                    scope.titleShowPlayers = "Show players";
+                }
+            }
+        }
+    };
 });
