@@ -104,7 +104,7 @@ angular.module('wegas.service.auth', [
                 "firstname": firstname,
                 "lastname": lastname
             }).success(function(data) {
-                deferred.resolve(Responses.success("You are registered", true));
+                deferred.resolve(Responses.success("Account created", true));
             }).error(function(data) {
                 deferred.resolve(Responses.danger(data.message, false));
             });
