@@ -180,6 +180,18 @@
 		border-top:solid 1px $border;
 		box-sizing: border-box;
 
+		.modal__tools__info{
+			margin:0px;
+			padding:0px;
+			height:48px;
+			line-height:48px;
+			color:$secondary-color;
+			i{
+				color:$secondary-color;
+				margin:0px 8px;
+			}
+		}
+
 		.modal__tools__message{
 			float:left;
 			margin:0px;
@@ -366,6 +378,7 @@
 			}
 		}
 	}
+
 }
 
 .shadow{
