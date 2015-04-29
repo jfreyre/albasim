@@ -19,7 +19,6 @@ angular.module('public.signup.directives', [])
         	lastname:""
         };
 	    ctrl.signup = function () {
-	    	console.log(ctrl.newUser);
 	        if (ctrl.newUser.p1 && ctrl.newUser.p1.length > 3) {
 	        	if(ctrl.newUser.firstname && ctrl.newUser.firstname.length > 0 && ctrl.newUser.lastname && ctrl.newUser.lastname.length > 0){
 		            if (ctrl.newUser.p1 === ctrl.newUser.p2) {
