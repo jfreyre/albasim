@@ -47,6 +47,7 @@ angular.module('private.player.sessions.directives', [])
                                     }
                                 });
                             } else {
+
                                 $state.go('wegas.private.player.sessions.join', {
                                     token: findResponse.data.token
                                 });
@@ -94,6 +95,9 @@ angular.module('private.player.sessions.directives', [])
                 // Use checkToken from index to join a new session.
                 scope.joinSession = function() {
                     scope.checkToken(scope.sessionToJoin.token);
+                    scope.sessionToJoin = {
+                        token: ""
+                    };
                 };
             }
         };
