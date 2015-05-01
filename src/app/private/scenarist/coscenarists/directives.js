@@ -112,11 +112,16 @@ angular
 
                 scope.canDuplicate = _.contains(scope.permission.permissions, "Duplicate");
                 scope.canCreate = _.contains(scope.permission.permissions, "Instantiate");
+
+                
             }
             calculatePermissions();
 
-
             scope.updatePermissions = function() {
+                if(scope.canEdit){
+                    scope.canDuplicate = true;
+                    scope.canCreate = true;
+                }
 
                 ScenariosModel.updatePermissions(this.scenario.id, this.permission.user.id, this.canCreate, this.canDuplicate, this.canEdit).then(function(response) {
                     if (response.isErroneous()) {
