@@ -53,10 +53,10 @@ $card-margin-size: 8px;
         float:right;
         .card__actions__access{
             float:left;
-            width:160px;
+            width:210px;
             .line{
                 font-size:14px;
-                padding:6px 2px 4px 2px;
+                padding:2px 2px 4px 2px;
             }
             .choice{
                 float:left;
@@ -66,8 +66,9 @@ $card-margin-size: 8px;
                 float:left;
             }
             .key{
-                font-style:italic;
-                float:left;
+                font-weight:500;
+                text-align:right;
+                margin-right:12px;
             }
 
         }
