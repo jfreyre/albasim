@@ -163,58 +163,17 @@ angular.module('private.trainer.directives', [
 .directive('trainerSession', function(Flash) {
     return {
         templateUrl: 'app/private/trainer/directives.tmpl/card.html',
-        restrict: 'A',
-        require: "^trainerSessionsIndex",
         scope: {
            session: '=',
            archive: "=",
            editAccess: "="
         },
-        link : function(scope, element, attrs, parentCtrl){
-            // Private function
-            var resetSessionToSet = function(){
-                scope.sessionToSet = {
-                    id: scope.session.id,
-                    name: scope.session.name,
-                    comments: scope.session.gameModel.comments
-                };
-            }
-
+        link : function(scope, element, attrs){
             // Public parameters
-            scope.editingName = false;
-            scope.editingComments = false;
-            resetSessionToSet();
-
-            // Public function
-            scope.toogleEditingName = function(){
-                if(scope.editingComments){
-                    scope.toogleEditingComments();
-                }
-                scope.editingName = (!scope.editingName);
-                resetSessionToSet();
-            };
-
-            // Public function
-            scope.editName = function(){
-                parentCtrl.editName(scope.sessionToSet);
-                scope.toogleEditingName();
-            };
-
-            // Public function
-            scope.toogleEditingComments = function(){
-                if(scope.editingName){
-                    scope.toogleEditingName();
-                }
-                scope.editingComments = (!scope.editingComments);
-                resetSessionToSet();
-            };
-
-            // Public function
-            scope.editComments = function(){
-                parentCtrl.editComments(scope.sessionToSet);
-                scope.toogleEditingComments();
-            };
-
+            scope.open = false;
+            if(scope.session.access !== "CLOSE"){
+                scope.open = true;
+            }
             scope.ServiceURL = ServiceURL;
         }
     }
