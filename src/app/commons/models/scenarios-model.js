@@ -555,7 +555,7 @@ angular.module('wegas.models.scenarios', [])
                 .success(function(data) {
                     if (data.events !== undefined && data.events.length == 0) {
                         var newScenario = data.entities[0];
-                        scenarios.cache.LIVE.push(newScenario);
+                        cacheScenario("LIVE", newScenario);
                         deferred.resolve(Responses.success('Scenario has been duplicated with name: "' + newScenario.name + '"', newScenario));
                     } else if (data.events !== undefined) {
                         deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
