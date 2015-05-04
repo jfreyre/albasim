@@ -7,7 +7,7 @@ angular.module('private.trainer.directives', [
     controller : "TrainerIndexController as trainerIndexCtrl"
   };
 })
-.controller("TrainerIndexController", function TrainerIndexController($rootScope, SessionsModel, Flash){
+.controller("TrainerIndexController", function TrainerIndexController($rootScope, $scope, SessionsModel, Flash){
     var ctrl = this,
         initMaxSessionsDisplayed = function(){
             if(ctrl.sessions.length > 12){
@@ -33,6 +33,15 @@ angular.module('private.trainer.directives', [
             all: true
         };
         ctrl.search = "";
+        $rootScope.$on("changeSearch", function(e, newSearch){
+            ctrl.search = newSearch;
+        });
+        $scope.$watch(function(){
+            return ctrl.search;
+        }, function(newSearch){
+            $rootScope.search = newSearch;
+        });
+
         ctrl.sessions = [];
         ctrl.archives = [];
         ctrl.maxSessionsDisplayed = null;
