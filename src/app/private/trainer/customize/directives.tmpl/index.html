@@ -1,6 +1,6 @@
 <div class="modal__header">
 	<div class="modal__illustration illustration illustration--medium illustration--icon" illustration="ICON_{{customizeIndexCtrl.infos.color}}_{{customizeIndexCtrl.infos.icon}}"></div>
-	<h5 class="modal__title">{{customizeIndexCtrl.scenario.name | limitTo: customizeIndexCtrl.MAX_DISPLAYED_CHARS}}<span ng-if="customizeIndexCtrl.scenarios.name.length > customizeIndexCtrl.MAX_DISPLAYED_CHARS">...</span></h5>
+	<h5 class="modal__title">{{customizeIndexCtrl.session.name | limitTo: customizeIndexCtrl.MAX_DISPLAYED_CHARS}}<span ng-if="customizeIndexCtrl.session.name.length > customizeIndexCtrl.MAX_DISPLAYED_CHARS">...</span></h5>
 	<a class="modal__close button button--medium button--label-off button--default-reverse button--close" ng-click="close()">
    		<span class="button__label">Close</span>
 	</a>
@@ -17,20 +17,20 @@
 		class="modal__content"
 		active-infos="customizeIndexCtrl.infos"
 		check-change="customizeIndexCtrl.checkChanges"
-		scenarist-customize-infos>
+		trainer-sessions-customize-infos>
 </div>
 <div 	ng-if="customizeIndexCtrl.tabs.display" class="modal__content">
 	<div 
 		class="modal__content__colors"
 		active-color="customizeIndexCtrl.infos.color" 
 		change="customizeIndexCtrl.changeColor" 
-		scenarist-customize-colors>	
+		trainer-sessions-customize-colors>	
 	</div>
 	<div 
 		class="modal__content__icons"
 		active-icon="customizeIndexCtrl.infos.icon" 
 		change="customizeIndexCtrl.changeIcon"
-		scenarist-customize-icons >	
+		trainer-sessions-customize-icons >	
 	</div>
 </div>
 <div class="modal__tools">
