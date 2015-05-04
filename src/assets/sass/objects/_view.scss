@@ -102,7 +102,7 @@
     &.view--history-download
     {
         @include make-xs-column(12, 96px);
-        @include make-md-column(4, 96px);
+        @include make-md-column(3, 96px);
         .form{
             margin:0px;
             padding:0px;
@@ -112,7 +112,7 @@
     &.view--scenarios-list,
     &.view--history-list {
         @include make-xs-column(12, 96px);
-        @include make-md-column(8, 96px);
+        @include make-md-column(9, 96px);
         height:100%;
 
         h3{
@@ -369,6 +369,7 @@
         padding:14px 7px;
         float:left;
         color:black;
+        cursor: pointer;
     }
 
     .view__menu-secondary{
