@@ -1,15 +1,15 @@
-angular.module('private.scenarist.customize.directives', [
+angular.module('private.scenarist.settings.directives', [
     'wegas.service.customize'
 ])
-    .directive('scenaristCustomizeIndex', function() {
+    .directive('scenaristSettingsIndex', function() {
         return {
             scope: {
                 close: "&"
             },
-            templateUrl: 'app/private/scenarist/customize/directives.tmpl/index.html',
-            controller: "ScenaristCustomizeIndexController as customizeIndexCtrl"
+            templateUrl: 'app/private/scenarist/settings/directives.tmpl/index.html',
+            controller: "ScenaristSettingsIndexController as settingsIndexCtrl"
         };
-    }).controller("ScenaristCustomizeIndexController", function ScenaristCustomizeIndexController($rootScope, $scope, $stateParams, ScenariosModel, Flash) {
+    }).controller("ScenaristSettingsIndexController", function ScenaristSettingsIndexController($rootScope, $scope, $stateParams, ScenariosModel, Flash) {
         var ctrl = this,
             initTabs = function() {
                 return {
@@ -138,12 +138,12 @@ angular.module('private.scenarist.customize.directives', [
             scope:{
                 activeInfos: "="
             },
-            templateUrl: 'app/private/scenarist/customize/directives.tmpl/infos-form.html'
+            templateUrl: 'app/private/scenarist/settings/directives.tmpl/infos-form.html'
         }
     })
     .directive('scenaristCustomizeIcons', function(Customize) {
         return {
-            templateUrl: 'app/private/scenarist/customize/directives.tmpl/icons-picker.html',
+            templateUrl: 'app/private/scenarist/settings/directives.tmpl/icons-picker.html',
             scope: {
                 activeIcon: "=",
                 change: "="
@@ -155,7 +155,7 @@ angular.module('private.scenarist.customize.directives', [
     })
     .directive('scenaristCustomizeColors', function(Customize) {
         return {
-            templateUrl: 'app/private/scenarist/customize/directives.tmpl/colors-picker.html',
+            templateUrl: 'app/private/scenarist/settings/directives.tmpl/colors-picker.html',
             scope: {
                 activeColor: "=",
                 change: "="
