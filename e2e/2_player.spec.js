@@ -147,15 +147,15 @@ describe('Player authenticated part', function() {
 
     it('should not be able to join a scenarist url', function() {
 
-        var sceanristUrl = [
+        var scenaristUrls = [
             '/#/scenarist',
             '/#/scenarist/8002/customize',
             '/#/scenarist/8002/coscenarists',
             '/#/scenarist/8002/history'
         ];
 
-        for (var i = sceanristUrl.length - 1; i >= 0; i--) {
-            var url = sceanristUrl[i];
+        for (var i = scenaristUrls.length - 1; i >= 0; i--) {
+            var url = scenaristUrls[i];
 
             browser.get(rootUrl + url);
 
