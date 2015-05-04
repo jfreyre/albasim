@@ -23,7 +23,7 @@
       <div ng-if="!open" class="key-label">No other player can join</div>
       <div ng-if="open" class="key-label">Players can join with key:</div><div ng-if="open" class="key">{{session.token}}</div>
     </div>
-    <a class="button button--medium button--round button--default-reverse button--label-off button--customize" title="Settings" ui-sref=".settings({id: session.id})">
+    <a class="button button--medium button--round button--default-reverse button--label-off button--settings" title="Settings" ui-sref=".settings({id: session.id})">
       <span class="button__label">Settings</span>
     </a>
     <a class="button button--medium button--round button--default-reverse button--label-off button--user" title="Manage Users" ui-sref=".users({id: session.id})">
