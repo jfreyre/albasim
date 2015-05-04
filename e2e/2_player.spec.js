@@ -12,8 +12,8 @@ function login_as_player() {
     var passwordInput = browser.driver.findElement(by.id('password'));
     passwordInput.sendKeys('kalle123');
 
-    var form = browser.driver.findElement(by.css("form"))
-    var submitBtn = form.findElement(by.css('input[type=submit]'))
+    var form = browser.driver.findElement(by.css("form"));
+    var submitBtn = form.findElement(by.css('input[type=submit]'));
     submitBtn.click();
 
     browser.driver.sleep(500);
@@ -129,7 +129,7 @@ describe('Player authenticated part', function() {
             '/#/trainer',
             '/#/trainer/1018399/customize',
             '/#/trainer/1018399/users'
-        ]
+        ];
 
         for (var i = trainersUrl.length - 1; i >= 0; i--) {
             var url = trainersUrl[i];
@@ -140,7 +140,7 @@ describe('Player authenticated part', function() {
 
             expect(browser.getCurrentUrl()).toBe(rootUrl + '/#/player');
             expect(page.modal.isPresent()).toBe(false);
-        };
+        }
     });
 
 
@@ -152,7 +152,7 @@ describe('Player authenticated part', function() {
             '/#/scenarist/8002/customize',
             '/#/scenarist/8002/coscenarists',
             '/#/scenarist/8002/history'
-        ]
+        ];
 
         for (var i = sceanristUrl.length - 1; i >= 0; i--) {
             var url = sceanristUrl[i];
@@ -163,7 +163,7 @@ describe('Player authenticated part', function() {
 
             expect(browser.getCurrentUrl()).toBe(rootUrl + '/#/player');
             expect(page.modal.isPresent()).toBe(false);
-        };
+        }
     });
 
     it('should not be able to join an admin url', function() {
@@ -173,8 +173,7 @@ describe('Player authenticated part', function() {
             '/#/admin/users',
             '/#/admin/users/1',
             '/#/admin/groups',
-
-        ]
+        ];
 
         for (var i = adminUrl.length - 1; i >= 0; i--) {
             var url = adminUrl[i];
@@ -186,7 +185,7 @@ describe('Player authenticated part', function() {
             expect(browser.getCurrentUrl()).toBe(rootUrl + '/#/player');
             expect(page.modal.isPresent()).toBe(false);
 
-        };
+        }
     });
 
 
