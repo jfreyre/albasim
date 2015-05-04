@@ -44,83 +44,83 @@ describe('Player authenticated part', function() {
         logout();
     });
 
-    // it('is the player workspace', function() {
-    //     expect(page.headingWorkspace.getText()).toBe('Player workspace');
-    // });
+    it('is the player workspace', function() {
+        expect(page.headingWorkspace.getText()).toBe('Player workspace');
+    });
 
-    // it('should contains no scenarios', function() {
-    //     var contentWorkspace = element(by.css('.view--sessions-list p'));
+    it('should contains no scenarios', function() {
+        var contentWorkspace = element(by.css('.view--sessions-list p'));
 
-    //     expect(contentWorkspace.getText()).toBe('No sessions');
-    // });
-
-
-    // it('should be able to join and leave a game with existing teams', function() {
-
-    //     expect(page.modal.isPresent()).toBe(false);
-
-    //     page.tokenInput.sendKeys("artos15-al");
-
-    //     page.joinForm.submit().then(function() {
-    //         expect(page.modal.isPresent()).toBe(true);
+        expect(contentWorkspace.getText()).toBe('No sessions');
+    });
 
 
-    //         var teams = element.all(by.css('a.button[ng-click="joinTeam(team.id)"]'));
-    //         teams.count().then(function(nb) {
-    //             expect(nb).toBeGreaterThan(0);
-    //         });
+    it('should be able to join and leave a game with existing teams', function() {
 
-    //         var firstTeam = element(by.css('.modal__content .card:first-child a[ng-click="joinTeam(team.id)"]'));
+        expect(page.modal.isPresent()).toBe(false);
 
-    //         firstTeam.click().then(function() {
-    //             browser.waitForAngular();
-    //             browser.driver.sleep(1500);
-    //             expect(page.modal.isPresent()).toBe(false);
+        page.tokenInput.sendKeys("artos15-al");
+
+        page.joinForm.submit().then(function() {
+            expect(page.modal.isPresent()).toBe(true);
 
 
-    //             // Leaving the game
-    //             var gameTitle = element(by.css('.card .line--primary'));
-    //             expect(gameTitle.getText()).toBe('Artos15');
+            var teams = element.all(by.css('a.button[ng-click="joinTeam(team.id)"]'));
+            teams.count().then(function(nb) {
+                expect(nb).toBeGreaterThan(0);
+            });
+
+            var firstTeam = element(by.css('.modal__content .card:first-child a[ng-click="joinTeam(team.id)"]'));
+
+            firstTeam.click().then(function() {
+                browser.waitForAngular();
+                browser.driver.sleep(1500);
+                expect(page.modal.isPresent()).toBe(false);
 
 
-    //             var leaveGame = element(by.css('a[confirmed-click="leave(session.id)"]'));
-
-    //             leaveGame.click().then(function() {
-
-    //                 var ptor = protractor.getInstance();
-    //                 var alertDialog = ptor.switchTo().alert();
-
-    //                 alertDialog.accept().then(function() {
-
-    //                     var cards = element.all(by.css('.card'));
-    //                     cards.count().then(function(numberOfCards) {
-    //                         expect(numberOfCards).toBe(0);
-    //                     });
-    //                 });
+                // Leaving the game
+                var gameTitle = element(by.css('.card .line--primary'));
+                expect(gameTitle.getText()).toBe('Artos15');
 
 
-    //             });
-    //         });
+                var leaveGame = element(by.css('a[confirmed-click="leave(session.id)"]'));
+
+                leaveGame.click().then(function() {
+
+                    var ptor = protractor.getInstance();
+                    var alertDialog = ptor.switchTo().alert();
+
+                    alertDialog.accept().then(function() {
+
+                        var cards = element.all(by.css('.card'));
+                        cards.count().then(function(numberOfCards) {
+                            expect(numberOfCards).toBe(0);
+                        });
+                    });
 
 
-    //     });
-    // });
+                });
+            });
 
 
-    // it('should be able to edit his profile', function() {
-    //     element(by.css('[ng-click="editProfile()"]')).click().then(function() {
-    //         expect(page.modal.isPresent()).toBe(true);
+        });
+    });
 
-    //         var firstname = element(by.css('[ng-model="user.account.firstname"]'));
-    //         expect(firstname.getAttribute('value')).toBe('Fake player');
 
-    //         var form = element(by.css('[ng-submit="updateInformations()"]'));
+    it('should be able to edit his profile', function() {
+        element(by.css('[ng-click="editProfile()"]')).click().then(function() {
+            expect(page.modal.isPresent()).toBe(true);
 
-    //         form.submit().then(function() {
-    //             expect(page.modal.isPresent()).toBe(false);
-    //         });
-    //     });
-    // });
+            var firstname = element(by.css('[ng-model="user.account.firstname"]'));
+            expect(firstname.getAttribute('value')).toBe('Fake player');
+
+            var form = element(by.css('[ng-submit="updateInformations()"]'));
+
+            form.submit().then(function() {
+                expect(page.modal.isPresent()).toBe(false);
+            });
+        });
+    });
 
 
     it('should not be able to join a trainer url', function() {
