@@ -1,7 +1,8 @@
 'use strict';
 
 var rootUrl = "http://localhost:8080/dist";
-
+var Chance = require('chance');
+var chance = new Chance();
 
 function login_as_trainer() {
     browser.get(rootUrl + '/');
@@ -12,12 +13,11 @@ function login_as_trainer() {
     var passwordInput = browser.driver.findElement(by.id('password'));
     passwordInput.sendKeys('kalle123');
 
-    var form = browser.driver.findElement(by.css("form"))
-    var submitBtn = form.findElement(by.css('input[type=submit]'))
-    submitBtn.click();
-
-    browser.driver.sleep(500);
-    browser.waitForAngular();
+    var form = browser.driver.findElement(by.css('form[ng-submit="login()"]'));
+    form.submit().then(function() {
+        browser.driver.sleep(500);
+        browser.waitForAngular();
+    });
 }
 
 function logout() {
@@ -81,7 +81,7 @@ describe('Trainer authenticated part', function() {
 
             browser.driver.sleep(500);
 
-            expect(browser.getCurrentUrl()).toBe(rootUrl + '/#/player');
+            expect(browser.getCurrentUrl()).toBe(rootUrl + '/#/trainer');
             expect(page.modal.isPresent()).toBe(false);
         }
     });
@@ -102,10 +102,49 @@ describe('Trainer authenticated part', function() {
 
             browser.driver.sleep(500);
 
-            expect(browser.getCurrentUrl()).toBe(rootUrl + '/#/player');
+            expect(browser.getCurrentUrl()).toBe(rootUrl + '/#/trainer');
             expect(page.modal.isPresent()).toBe(false);
 
         }
     });
+
+    // it('should be able to create, archive and delete a session', function() {
+    //     // Register a new locator
+    //     by.addLocator('cardsTitle', function(title, opt_parentElement, opt_rootSelector) {
+    //         // This function will be serialized as a string and will execute in the
+    //         // browser. The first argument is the text for the button. The second
+    //         // argument is the parent element, if any.
+    //         var using = opt_parentElement,
+    //             cards = using.querySelectorAll('.card');
+
+    //         // Return an array of cards with the text.
+    //         return Array.prototype.filter.call(cards, function(card) {
+    //             return card.querySelectorAll('.line.line--primary').textContent === title;
+    //         });
+    //     });
+
+    //     var input = element(by.model('newSession.name'));
+    //     var newSessionName = chance.string();
+
+    //     input.sendKeys(newSessionName);
+
+    //     // select an empty template
+    //     element(by.css('#scenario-template option:nth-child(2)')).click();
+
+
+    //     var form = element(by.css('form[ng-submit="addSession()"]'))
+
+    //     form.submit().then(function) {
+    //         browser.driver.sleep(500);
+    //         browser.waitForAngular();
+
+
+    //         var newGame = var joinedGame = element(by.cardsTitle(newSessionName));
+
+
+
+    //     });
+
+    // });
 
 });

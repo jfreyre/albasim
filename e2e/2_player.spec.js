@@ -1,6 +1,8 @@
 'use strict';
 
 var rootUrl = "http://localhost:8080/dist";
+var Chance = require('chance');
+var chance = new Chance();
 
 
 function login_as_player() {
@@ -12,12 +14,11 @@ function login_as_player() {
     var passwordInput = browser.driver.findElement(by.id('password'));
     passwordInput.sendKeys('kalle123');
 
-    var form = browser.driver.findElement(by.css("form"));
-    var submitBtn = form.findElement(by.css('input[type=submit]'));
-    submitBtn.click();
-
-    browser.driver.sleep(500);
-    browser.waitForAngular();
+    var form = browser.driver.findElement(by.css('form[ng-submit="login()"]'));
+    form.submit().then(function() {
+        browser.driver.sleep(500);
+        browser.waitForAngular();
+    });
 }
 
 function logout() {
@@ -35,6 +36,9 @@ describe('Player authenticated part', function() {
 
     beforeEach(function() {
         page = require('./2_player.po');
+
+        // var ptor = protractor.getInstance();
+        // ptor.ignoreSynchronization = true;
 
         login_as_player();
         browser.get(rootUrl + "/#");
@@ -62,8 +66,8 @@ describe('Player authenticated part', function() {
         page.tokenInput.sendKeys("artos15-al");
 
         page.joinForm.submit().then(function() {
-            expect(page.modal.isPresent()).toBe(true);
 
+            expect(page.modal.isPresent()).toBe(true);
 
             var teams = element.all(by.css('a.button[ng-click="joinTeam(team.id)"]'));
             teams.count().then(function(nb) {
@@ -91,6 +95,7 @@ describe('Player authenticated part', function() {
                     var alertDialog = ptor.switchTo().alert();
 
                     alertDialog.accept().then(function() {
+                        browser.waitForAngular();
 
                         var cards = element.all(by.css('.card'));
                         cards.count().then(function(numberOfCards) {
@@ -106,11 +111,26 @@ describe('Player authenticated part', function() {
         });
     });
 
-it('should be able to join and leave a game and create a new team', function() {
+    it('should be able to join and leave a game and create a new team', function() {
+        // Register a new locator
+        by.addLocator('cardsTitle', function(title, opt_parentElement, opt_rootSelector) {
+            // This function will be serialized as a string and will execute in the
+            // browser. The first argument is the text for the button. The second
+            // argument is the parent element, if any.
+            var using = opt_parentElement,
+                cards = using.querySelectorAll('.card');
+
+            // Return an array of cards with the text.
+            return Array.prototype.filter.call(cards, function(card) {
+                return card.querySelectorAll('.line.line--primary').textContent === title;
+            });
+        });
 
         expect(page.modal.isPresent()).toBe(false);
 
         page.tokenInput.sendKeys("artos15-al");
+
+        var newTeamName = chance.string();
 
         page.joinForm.submit().then(function() {
             expect(page.modal.isPresent()).toBe(true);
@@ -121,38 +141,49 @@ it('should be able to join and leave a game and create a new team', function() {
                 expect(nb).toBeGreaterThan(0);
             });
 
-            var firstTeam = element(by.css('.modal__content .card:first-child a[ng-click="joinTeam(team.id)"]'));
+            var teamInput = element(by.css('.modal__tools input'));
+            teamInput.sendKeys(newTeamName);
 
-            firstTeam.click().then(function() {
+            var createTeamBtn = element(by.css('a[ng-click="createTeam()"]'));
+
+            createTeamBtn.click().then(function() {
+
                 browser.waitForAngular();
-                browser.driver.sleep(1500);
-                expect(page.modal.isPresent()).toBe(false);
+                browser.driver.sleep(2500);
+
+                var joinCreatedTeamBtn = element(by.css('.modal__content .card:last-child a[ng-click="joinTeam(team.id)"]'));
+
+                joinCreatedTeamBtn.click().then(function() {
+
+                    browser.waitForAngular();
+                    browser.driver.sleep(1500);
+
+                    expect(page.modal.isPresent()).toBe(false);
+
+                    var joinedGame = element(by.cardsTitle('Artos15'));
 
 
-                // Leaving the game
-                var gameTitle = element(by.css('.card .line--primary'));
-                expect(gameTitle.getText()).toBe('Artos15');
+                    var leaveGame = element(by.css('a[confirmed-click="leave(session.id)"]', joinedGame));
 
+                    leaveGame.click().then(function() {
 
-                var leaveGame = element(by.css('a[confirmed-click="leave(session.id)"]'));
+                        var ptor = protractor.getInstance();
+                        var alertDialog = ptor.switchTo().alert();
 
-                leaveGame.click().then(function() {
+                        alertDialog.accept().then(function() {
 
-                    var ptor = protractor.getInstance();
-                    var alertDialog = ptor.switchTo().alert();
+                            browser.waitForAngular();
 
-                    alertDialog.accept().then(function() {
-
-                        var cards = element.all(by.css('.card'));
-                        cards.count().then(function(numberOfCards) {
-                            expect(numberOfCards).toBe(0);
+                            var cards = element.all(by.css('.card'));
+                            cards.count().then(function(numberOfCards) {
+                                expect(numberOfCards).toBe(0);
+                            });
                         });
+
+
                     });
-
-
                 });
             });
-
 
         });
     });
