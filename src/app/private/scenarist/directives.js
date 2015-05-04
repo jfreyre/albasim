@@ -134,6 +134,7 @@ angular.module('private.scenarist.directives', [
             },
             link: function(scope, element, attrs) {
                 scope.ServiceURL = ServiceURL;
+                scope.MAX_DISPLAYED_CHARS = MAX_DISPLAYED_CHARS;
             }
         }
     });

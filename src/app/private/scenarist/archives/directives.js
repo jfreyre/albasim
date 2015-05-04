@@ -64,6 +64,9 @@ angular.module('private.scenarist.archives.directives', [])
                 unarchive: "=",
                 delete:"="
             },
-            templateUrl: 'app/private/scenarist/archives/directives.tmpl/list.html'
+            templateUrl: 'app/private/scenarist/archives/directives.tmpl/list.html',
+            link:function(scope, elem, attrs){
+                scope.MAX_DISPLAYED_CHARS = MAX_DISPLAYED_CHARS;
+            }
         };
     });

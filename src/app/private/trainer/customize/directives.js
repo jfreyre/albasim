@@ -17,6 +17,7 @@ angular.module('private.trainer.customize.directives', [
                     display: false
                 }
             };
+        ctrl.MAX_DISPLAYED_CHARS = MAX_DISPLAYED_CHARS;
         ctrl.session = {};
         ctrl.hasChanges = {
             all: false,

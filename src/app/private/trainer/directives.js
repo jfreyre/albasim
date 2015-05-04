@@ -175,6 +175,7 @@ angular.module('private.trainer.directives', [
                 scope.open = true;
             }
             scope.ServiceURL = ServiceURL;
+            scope.MAX_DISPLAYED_CHARS = MAX_DISPLAYED_CHARS;
         }
     }
 });

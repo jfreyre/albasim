@@ -10,7 +10,7 @@ angular.module('private.player.session.join.directives', [])
 }).controller('PlayerSessionJoinController', function PlayerSessionJoinController($rootScope, $scope, $stateParams, SessionsModel, Flash){
     /* Assure access to ctrl. */
     var ctrl = this;
-
+        ctrl.MAX_DISPLAYED_CHARS = MAX_DISPLAYED_CHARS;
     /* Container for datas */
     ctrl.sessionToJoin = {};
     ctrl.newTeam = {
@@ -116,6 +116,8 @@ angular.module('private.player.session.join.directives', [])
         },
         link: function(scope, elem, attrs){
             scope.showPlayers = false;
+            scope.MAX_DISPLAYED_CHARS = MAX_DISPLAYED_CHARS;
+
             scope.titleShowPlayers = "Show players";
             scope.tooglePlayersVisibility = function(){
                 scope.showPlayers = !scope.showPlayers;
