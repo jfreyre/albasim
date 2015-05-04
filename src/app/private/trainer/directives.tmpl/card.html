@@ -14,8 +14,8 @@
         ng-class="{true: 'button--lock', false: 'button--warning-reverse button--unlock '}[session.access == 'CLOSE']">
       <span class="button__label">Change Access</span>
     </a>
-    <a class="button button--medium button--round button--default-reverse button--label-off button--customize" title="Customize session" ui-sref=".customize({id: session.id})">
-      <span class="button__label">Customize Session</span>
+    <a class="button button--medium button--round button--default-reverse button--label-off button--customize" title="Settings" ui-sref=".settings({id: session.id})">
+      <span class="button__label">Settings</span>
     </a>
     <a class="button button--medium button--round button--default-reverse button--label-off button--user" title="Manage Users" ui-sref=".users({id: session.id})">
       <span class="button__label">Manage Users</span>
