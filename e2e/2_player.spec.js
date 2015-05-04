@@ -106,6 +106,57 @@ describe('Player authenticated part', function() {
         });
     });
 
+it('should be able to join and leave a game and create a new team', function() {
+
+        expect(page.modal.isPresent()).toBe(false);
+
+        page.tokenInput.sendKeys("artos15-al");
+
+        page.joinForm.submit().then(function() {
+            expect(page.modal.isPresent()).toBe(true);
+
+
+            var teams = element.all(by.css('a.button[ng-click="joinTeam(team.id)"]'));
+            teams.count().then(function(nb) {
+                expect(nb).toBeGreaterThan(0);
+            });
+
+            var firstTeam = element(by.css('.modal__content .card:first-child a[ng-click="joinTeam(team.id)"]'));
+
+            firstTeam.click().then(function() {
+                browser.waitForAngular();
+                browser.driver.sleep(1500);
+                expect(page.modal.isPresent()).toBe(false);
+
+
+                // Leaving the game
+                var gameTitle = element(by.css('.card .line--primary'));
+                expect(gameTitle.getText()).toBe('Artos15');
+
+
+                var leaveGame = element(by.css('a[confirmed-click="leave(session.id)"]'));
+
+                leaveGame.click().then(function() {
+
+                    var ptor = protractor.getInstance();
+                    var alertDialog = ptor.switchTo().alert();
+
+                    alertDialog.accept().then(function() {
+
+                        var cards = element.all(by.css('.card'));
+                        cards.count().then(function(numberOfCards) {
+                            expect(numberOfCards).toBe(0);
+                        });
+                    });
+
+
+                });
+            });
+
+
+        });
+    });
+
 
     it('should be able to edit his profile', function() {
         element(by.css('[ng-click="editProfile()"]')).click().then(function() {
