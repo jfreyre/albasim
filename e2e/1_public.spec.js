@@ -1,48 +1,48 @@
-// 'use strict';
+'use strict';
 
-// var rootUrl = "http://localhost:8080/dist";
-
-
-// describe('Unauthenticated Part', function () {
-//   var page;
+var rootUrl = "http://localhost:8080/dist";
 
 
-//   beforeEach(function () {
-//     page = require('./1_public.po');
+describe('Unauthenticated Part', function () {
+  var page;
 
-//     browser.get(rootUrl + '/');
 
-//     // Should we logout before doing public asserts ?
-//     element.all(by.css('a.button--sign-out')).count().then(function(count) {
+  beforeEach(function () {
+    page = require('./1_public.po');
 
-//       if (count > 0) {
-//         element(by.css('a.button--sign-out')).click();
-//       }
-//       browser.driver.sleep(500);
-//       browser.waitForAngular();
+    browser.get(rootUrl + '/');
 
-//     });
-//   });
+    // Should we logout before doing public asserts ?
+    element.all(by.css('a.button--sign-out')).count().then(function(count) {
 
-//   it('should include jumbotron with correct data', function() {
-//     expect(page.h1El.getText()).toBe('Wegas');
-//     expect(page.h2El.getText()).toBe('The "learning by doing" solution from ALBASIM');
+      if (count > 0) {
+        element(by.css('a.button--sign-out')).click();
+      }
+      browser.driver.sleep(500);
+      browser.waitForAngular();
 
-//     expect(browser.getTitle()).toEqual('Wegas - Web game authoring system');
-//   });
+    });
+  });
 
-//   it('should contain a signup form', function () {
-//     page.signupBtn.click();
+  it('should include jumbotron with correct data', function() {
+    expect(page.h1El.getText()).toBe('Wegas');
+    expect(page.h2El.getText()).toBe('The "learning by doing" solution from ALBASIM');
 
-//     expect(page.signupForm.isPresent()).toBe(true);
-//   });
+    expect(browser.getTitle()).toEqual('Wegas - Web game authoring system');
+  });
 
-//   it('should contain a remember password form', function () {
-//     page.remindBtn.click();
+  it('should contain a signup form', function () {
+    page.signupBtn.click();
 
-//     expect(page.remindForm.isPresent()).toBe(true);
-//   });
+    expect(page.signupForm.isPresent()).toBe(true);
+  });
 
-// });
+  it('should contain a remember password form', function () {
+    page.remindBtn.click();
+
+    expect(page.remindForm.isPresent()).toBe(true);
+  });
+
+});
 
 
