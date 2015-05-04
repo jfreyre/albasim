@@ -38,14 +38,14 @@ describe('Trainer authenticated part', function() {
     beforeEach(function() {
         page = require('./3_trainer.po');
         login_as_trainer();
-        browser.get(rootUrl + '/#');
+        browser.get(rootUrl + '/#/trainer');
     });
 
     afterEach(function() {
         logout();
     });
 
-    it('is the player workspace', function() {
+    it('is the trainer workspace', function() {
         expect(page.headingWorkspace.getText()).toBe('Trainer workspace');
     });
 
