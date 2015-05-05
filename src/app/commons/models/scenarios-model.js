@@ -357,7 +357,7 @@ angular.module('wegas.models.scenarios', [])
             var deferred = $q.defer(),
                 url = "rest/Public/GameModel/" + scenarioId + "/Duplicate";
             if (scenarioId) {
-                $http.post(ServiceURL + url, {
+                $http.post(ServiceURL + url, null, {
                     "headers": {
                         "managed-mode": "true"
                     }

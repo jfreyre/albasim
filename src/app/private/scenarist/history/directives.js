@@ -66,7 +66,6 @@ angular
             };
 
             $scope.copyScenario = function() {
-                console.info('d');
                 parentCtrl.copyScenario();
             };
         }
