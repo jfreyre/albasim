@@ -297,7 +297,7 @@
 		}
 	}
 
-	&.modal--customize{
+	&.modal--settings{
 		.modal__content{
         	@include make-row(0px);
         	padding:0px;
