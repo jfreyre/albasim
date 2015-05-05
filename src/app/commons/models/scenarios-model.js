@@ -353,6 +353,38 @@ angular.module('wegas.models.scenarios', [])
             return deferred.promise;
         };
 
+        model.copyScenario = function(scenarioId) {
+            var deferred = $q.defer(),
+                url = "rest/Public/GameModel/" + scenarioId + "/Duplicate";
+            if (scenarioId) {
+                $http.post(ServiceURL + url, null, {
+                    "headers": {
+                        "managed-mode": "true"
+                    }
+                }).success(function(data) {
+                    if (data.events !== undefined && data.events.length == 0) {
+                        cacheScenario("LIVE", data.entities[0]);
+                        deferred.resolve(Responses.success("Scenario copied", data.entities[0]));
+                    } else if (data.events !== undefined) {
+                        deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                    } else {
+                        deferred.resolve(Responses.danger("Whoops...", false));
+                    }
+
+                }).error(function(data) {
+                    if (data.events !== undefined && data.events.length > 0) {
+                        deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                    } else {
+                        deferred.resolve(Responses.danger("Whoops...", false));
+                    }
+                });
+            } else {
+                deferred.resolve(Responses.danger("You need to set which scenario will be copied", false));
+            }
+
+            return deferred.promise;
+        };
+
         model.updateScenario = function(id, infosToSet) {
             var deferred = $q.defer(),
                 scenarioBeforeChange = scenarios.findScenario("LIVE", id);
