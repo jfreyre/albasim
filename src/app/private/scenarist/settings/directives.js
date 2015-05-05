@@ -22,26 +22,34 @@ angular.module('private.scenarist.settings.directives', [
         ctrl.hasChanges = {
             all: false,
             color: false,
-            icon: false, 
+            icon: false,
             name: false,
-            comment: false, 
-            individual: false
+            comment: false,
+            individual: false,
+            scriptUri: false,
+            clientScriptUri: false,
+            cssUri: false,
+            pagesUri: false
         };
         ctrl.infos = {
             name : "",
             comments :"",
             color: "orange",
             icon:"gamepad",
-            individual: false
+            individual: false,
+            scriptUri: "",
+            clientScriptUri: "",
+            cssUri: "",
+            pagesUri: ""
         };
         ctrl.tabs = initTabs();
-            
+
         ctrl.updateScenario = function() {
             ScenariosModel.getScenario("LIVE", $stateParams.scenarioId, true).then(function(response) {
-                ctrl.scenario = response.data || {};                
+                ctrl.scenario = response.data || {};
                 if (response.isErroneous()) {
                     response.flash();
-                }else{
+                } else {
                     var icon = ctrl.scenario.properties.iconUri.split("_");
                     if (icon.length == 3 && icon[0] == "ICON") {
                         ctrl.infos.color = icon[1];
@@ -49,13 +57,18 @@ angular.module('private.scenarist.settings.directives', [
                     }
                     ctrl.infos.name = ctrl.scenario.name;
                     ctrl.infos.comments = ctrl.scenario.comments;
-                    ctrl.infos.individual = ctrl.scenario.properties.freeForAll; 
+                    ctrl.infos.individual = ctrl.scenario.properties.freeForAll;
+                    ctrl.infos.scriptUri = ctrl.scenario.properties.scriptUri;
+                    ctrl.infos.clientScriptUri = ctrl.scenario.properties.clientScriptUri;
+                    ctrl.infos.cssUri = ctrl.scenario.properties.cssUri;
+                    ctrl.infos.pagesUri = ctrl.scenario.properties.pagesUri;
+
                }
             });
         };
 
         ctrl.checkChanges = function(type, changes){
-            if(ctrl.scenario['@class'] == "Game"){
+            if(ctrl.scenario['@class'] == "GameModel"){
                 var oldColor = "orange",
                     oldIcon = "gamepad",
                     icon = ctrl.scenario.properties.iconUri.split("_");
@@ -76,10 +89,28 @@ angular.module('private.scenarist.settings.directives', [
                     case "comments":
                         ctrl.hasChanges.comments = (ctrl.scenario.comments !==  changes);
                         break;
-                    case "individual": 
+                    case "individual":
                         ctrl.hasChanges.individual = (ctrl.scenario.properties.freeForAll !==  changes);
+                        break;
+                    case "scriptUri":
+                        ctrl.hasChanges.scriptUri = (ctrl.scenario.properties.scriptUri !==  changes);
+                        break;
+                    case "clientScriptUri":
+                        ctrl.hasChanges.clientScriptUri = (ctrl.scenario.properties.clientScriptUri !==  changes);
+                        break;
+                    case "cssUri":
+                        ctrl.hasChanges.cssUri = (ctrl.scenario.properties.cssUri !==  changes);
+                        break;
+                    case "pages":
+                        ctrl.hasChanges.pagesUri = (ctrl.scenario.properties.pagesUri !==  changes);
+                        break;
+
                 }
-                ctrl.hasChanges.all =   ctrl.hasChanges.color || ctrl.hasChanges.icon || ctrl.hasChanges.name || ctrl.hasChanges.comments || ctrl.hasChanges.individual;
+                ctrl.hasChanges.all = ctrl.hasChanges.color || ctrl.hasChanges.icon ||
+                                    ctrl.hasChanges.name || ctrl.hasChanges.comments ||
+                                    ctrl.hasChanges.individual || ctrl.hasChanges.scriptUri ||
+                                    ctrl.hasChanges.clientScriptUri || ctrl.hasChanges.cssUri ||
+                                    ctrl.hasChanges.pagesUri;
             }
         };
 
@@ -130,6 +161,26 @@ angular.module('private.scenarist.settings.directives', [
             ctrl.checkChanges("individual", newIndividual);
         });
 
+        $scope.$watch(function(){
+            return ctrl.infos.scriptUri;
+        }, function(newScriptUri){
+            ctrl.checkChanges("scriptUri", newScriptUri);
+        });
+        $scope.$watch(function(){
+            return ctrl.infos.clientScriptUri;
+        }, function(newClientScriptUri){
+            ctrl.checkChanges("clientScriptUri", newClientScriptUri);
+        });
+        $scope.$watch(function(){
+            return ctrl.infos.cssUri;
+        }, function(newCssUri){
+            ctrl.checkChanges("cssUri", newCssUri);
+        });
+        $scope.$watch(function(){
+            return ctrl.infos.pagesUri;
+        }, function(newPagesUri){
+            ctrl.checkChanges("pagesUri", newPagesUri);
+        });
         ctrl.updateScenario();
         ctrl.activeTab("infos");
     })
@@ -139,6 +190,14 @@ angular.module('private.scenarist.settings.directives', [
                 activeInfos: "="
             },
             templateUrl: 'app/private/scenarist/settings/directives.tmpl/infos-form.html'
+        }
+    })
+    .directive('scenaristCustomizeAdvanced', function() {
+        return {
+            scope:{
+                activeInfos: "="
+            },
+            templateUrl: 'app/private/scenarist/settings/directives.tmpl/infos-advanced.html'
         }
     })
     .directive('scenaristCustomizeIcons', function(Customize) {

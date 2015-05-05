@@ -217,6 +217,24 @@ angular.module('wegas.models.scenarios', [])
                 scenarioBeforeChange.comments = infos.comments;
                 scenarioSetted = true;
             }
+            if (scenarioBeforeChange.properties.scriptUri !== infos.scriptUri) {
+                scenarioBeforeChange.properties.scriptUri = infos.scriptUri;
+                scenarioSetted = true;
+            }
+            if (scenarioBeforeChange.properties.clientScriptUri !== infos.clientScriptUri) {
+                scenarioBeforeChange.properties.clientScriptUri = infos.clientScriptUri;
+                scenarioSetted = true;
+            }
+            if (scenarioBeforeChange.properties.cssUri !== infos.cssUri) {
+                scenarioBeforeChange.properties.cssUri = infos.cssUri;
+                scenarioSetted = true;
+            }
+            if (scenarioBeforeChange.properties.pagesUri !== infos.pagesUri) {
+                scenarioBeforeChange.properties.pagesUri = infos.pagesUri;
+                scenarioSetted = true;
+            }
+
+
             if (scenarioSetted) {
                 var url = "rest/Public/GameModel/" + scenarioBeforeChange.id + "?view=EditorExtended";
                 $http.put(ServiceURL + url, scenarioBeforeChange, {
