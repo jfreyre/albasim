@@ -108,43 +108,46 @@ describe('Trainer authenticated part', function() {
         }
     });
 
-    // it('should be able to create, archive and delete a session', function() {
-    //     // Register a new locator
-    //     by.addLocator('cardsTitle', function(title, opt_parentElement, opt_rootSelector) {
-    //         // This function will be serialized as a string and will execute in the
-    //         // browser. The first argument is the text for the button. The second
-    //         // argument is the parent element, if any.
-    //         var using = opt_parentElement,
-    //             cards = using.querySelectorAll('.card');
+    it('should be able to create, archive and delete a session', function() {
+        // Register a new locator
+        by.addLocator('cardsTitle', function(title, opt_parentElement, opt_rootSelector) {
+            // This function will be serialized as a string and will execute in the
+            // browser. The first argument is the text for the button. The second
+            // argument is the parent element, if any.
+            var using = opt_parentElement,
+                cards = using.querySelectorAll('.card');
 
-    //         // Return an array of cards with the text.
-    //         return Array.prototype.filter.call(cards, function(card) {
-    //             return card.querySelectorAll('.line.line--primary').textContent === title;
-    //         });
-    //     });
+            // Return an array of cards with the text.
+            return Array.prototype.filter.call(cards, function(card) {
+                return card.querySelectorAll('.line.line--primary').textContent === title;
+            });
+        });
 
-    //     var input = element(by.model('newSession.name'));
-    //     var newSessionName = chance.string();
+        var input = element(by.model('newSession.name'));
+        var newSessionName = chance.string();
 
-    //     input.sendKeys(newSessionName);
+        input.sendKeys(newSessionName);
 
-    //     // select an empty template
-    //     element(by.css('#scenario-template option:nth-child(2)')).click();
-
-
-    //     var form = element(by.css('form[ng-submit="addSession()"]'))
-
-    //     form.submit().then(function) {
-    //         browser.driver.sleep(500);
-    //         browser.waitForAngular();
+        // select an empty template
+        element(by.css('#scenario-template option:nth-child(3)')).click();
 
 
-    //         var newGame = var joinedGame = element(by.cardsTitle(newSessionName));
+        var form = element(by.css('form[ng-submit="addSession()"]'))
+
+        form.submit().then(function() {
+            browser.driver.sleep(500);
+            browser.waitForAngular();
+
+            var joinedGame = element(by.cardsTitle(newSessionName));
+
+            var archiveBtn = joinedGame.element(by.css('a[ng-click="archive(session)"]'));
+            archiveBtn.click().then(function() {
+
+            });
 
 
+        });
 
-    //     });
-
-    // });
+    });
 
 });
