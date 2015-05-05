@@ -138,10 +138,15 @@ angular.module('wegas.service.auth', [
 
         service.remindPassword = function(email) {
             var deferred = $q.defer(),
-                obj = {
-                    "email": email
-                };
-            $http.post(ServiceURL + "rest/User/SendNewPassword", obj)
+                url = "rest/User/SendNewPassword";
+            $http.post(ServiceURL + url, {
+                "@class": "AuthenticationInformation",
+                "login": email
+            }, {
+                "headers": {
+                    "managed-mode": "true"
+                }
+            })
                 .success(function(data) {
                     deferred.resolve(Responses.success("A new password has been send", true));
                 })
