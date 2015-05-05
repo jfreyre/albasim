@@ -141,13 +141,14 @@ angular.module('private.trainer.directives', [
         scope.addSession = function(){
             if(scope.newSession.scenarioId != 0){
                 SessionsModel.createSession(scope.newSession.name, scope.newSession.scenarioId).then(function(response){
-                    response.flash();
                     if(!response.isErroneous()){
                         scope.newSession = {
                             name : "",
                             scenarioId : 0
                         };
                         parentCtrl.updateSessions();
+                    }else{
+                        response.flash();
                     }
                 });
             }else{
