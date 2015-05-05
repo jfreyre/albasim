@@ -1,4 +1,6 @@
-var ServiceURL = "/Wegas/";
+var ServiceURL = "/Wegas/",
+    MAX_DISPLAYED_CHARS = 32;
+
 angular.module('Wegas', [
     'flash',
     'ui.router',
@@ -16,8 +18,8 @@ angular.module('Wegas', [
 ])
 .config(function ($stateProvider, $urlRouterProvider, cfpLoadingBarProvider) {
     // Configurate loading bar
-    cfpLoadingBarProvider.latencyThreshold = 800;
-    cfpLoadingBarProvider.includeSpinner = false;
+    cfpLoadingBarProvider.latencyThreshold = 1200;
+    cfpLoadingBarProvider.includeSpinner = true;
     
     $stateProvider
         .state('wegas', {
