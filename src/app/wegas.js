@@ -1,4 +1,6 @@
-var ServiceURL = "/Wegas/";
+var ServiceURL = "/Wegas/",
+    MAX_DISPLAYED_CHARS = 32;
+
 angular.module('Wegas', [
     'flash',
     'ui.router',
