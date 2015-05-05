@@ -28,7 +28,9 @@ $buttons-icon : (
     (settings, $fa-var-cog),
     (valid, $fa-var-check),
     (admin, $fa-var-gavel),
-    (refresh, $fa-var-refresh)
+    (refresh, $fa-var-refresh),
+    (repeat, $fa-var-repeat),
+    (duplicate, $fa-var-files-o)
 );
 
 %button--with-icon{
