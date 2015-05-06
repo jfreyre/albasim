@@ -1,4 +1,6 @@
-var ServiceURL = "/Wegas/";
+var ServiceURL = "/Wegas/",
+    MAX_DISPLAYED_CHARS = 32;
+
 angular.module('Wegas', [
     'flash',
     'ui.router',
@@ -16,8 +18,8 @@ angular.module('Wegas', [
 ])
 .config(function ($stateProvider, $urlRouterProvider, cfpLoadingBarProvider) {
     // Configurate loading bar
-    cfpLoadingBarProvider.latencyThreshold = 800;
-    cfpLoadingBarProvider.includeSpinner = false;
+    cfpLoadingBarProvider.latencyThreshold = 1200;
+    cfpLoadingBarProvider.includeSpinner = true;
     
     $stateProvider
         .state('wegas', {
@@ -42,15 +44,11 @@ angular.module('Wegas', [
     	if(user == null){
     		$state.go("wegas.public");
     	}else{
-    		if(user.isScenarist){
-	    		$state.go("wegas.private.scenarist");
-    		}else{
-    			if(user.isTrainer){
-	    			$state.go("wegas.private.trainer");
-	    		}else{
-	    			$state.go("wegas.private.player");
-	    		}
-    		}
+    		if(user.isScenarist || user.isTrainer){
+                        $state.go("wegas.private.trainer");
+                }else{
+                        $state.go("wegas.private.player");
+                }
     	}
     });
 });

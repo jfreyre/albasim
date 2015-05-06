@@ -5,18 +5,14 @@
    		<span class="button__label">Close</span>
 	</a>
 </div>
-<div 
+<div
 	class="modal__content modal__content--nav-off"
-	scenarios="scenaristArchivesIndexCtrl.archives" 
+	scenarios="scenaristArchivesIndexCtrl.archives"
 	unarchive="scenaristArchivesIndexCtrl.unarchiveScenario"
 	delete="scenaristArchivesIndexCtrl.deleteArchivedScenario"
+	search="scenaristArchivesIndexCtrl.sfilter.search"
 	scenarist-scenarios-archives-list>
 </div>
 <div class="modal__tools">
-	<a 
-		class="button button--small button--danger button--trash" 
-		confirmed-click="scenaristArchivesIndexCtrl.deleteArchivedScenarios()" 
-        ng-confirm-click="Are you sure you want to delete all archived scenario ? This action is irreversible.">
-   			<span class="button__label">Delete all</span>
-	</a>
+	<input ng-model="scenaristArchivesIndexCtrl.sfilter.search" type="text" class="input input--small" placeholder="Search scenario" />
 </div>

@@ -21,7 +21,7 @@ angular
                 views: {
                     'workspace@wegas.private': {
                         controller: 'TrainerCtrl as trainerCtrl',
-                        templateUrl: 'app/private/trainer/sessions/sessions.tmpl.html'
+                        templateUrl: 'app/private/trainer/trainer.tmpl.html'
                     }
                 }
             })
@@ -62,7 +62,7 @@ angular
     .controller('ProfileCtrl', function ProfileCtrl($animate, $state, ModalService) {
 
         ModalService.showModal({
-            templateUrl: 'app/private/profile/tmpl/profile.html',
+            templateUrl: 'app/private/profile/profile.tmpl.html',
             controller: "ModalsController as modalsCtrl"
         }).then(function(modal) {
             var box = $(".modal"),

@@ -1,42 +1,31 @@
 angular.module('public.signup', [
+    'public.signup.directives'
 ])
 .config(function ($stateProvider) {
     $stateProvider
         .state('wegas.public.signup', {
             url: '/signup',
             views: {
-                "form": {
-                 	controller: 'PublicSignupCtrl as publicSignupCtrl',
-            		templateUrl: 'app/public/signup/signup.tmpl.html'
+                "modal@wegas.public" :{
+                    controller: 'PublicSignupModalCtrl'
                 }
             }
-           
+
         })
     ;
 })
-.controller('PublicSignupCtrl', function PublicSignupCtrl($state, Auth) {
-    var publicSignupCtrl = this;
-        publicSignupCtrl.formInfo = {};
+.controller('PublicSignupModalCtrl', function PublicSignupModalCtrl($animate, $state, ModalService) {
+     ModalService.showModal({
+        templateUrl: 'app/public/signup/signup.tmpl.html',
+        controller: "ModalsController as modalsCtrl"
+    }).then(function(modal) {
+        var box = $(".modal"),
+            shadow = $(".shadow");
+        $animate.addClass(box, "modal--open");
+        $animate.addClass(shadow, "shadow--show");
 
-    var signup = function () {
-
-        console.log("-> Registering user");
-
-        /* TODO: Implement correct form validation */
-        if (publicSignupCtrl.formInfo.p1 == publicSignupCtrl.formInfo.p2) {
-            Auth.signup(publicSignupCtrl.formInfo.email, publicSignupCtrl.formInfo.p1).then(function(result) {
-                if(result === true) {
-                    /* TODO: Implement sweet and nice information/modal message */
-                    window.alert('Thanks. You can now connect!')
-                } else {
-                    /* TODO: Implement sweet and nice information/modal message */
-                    window.alert('Oups... ' + result.message);
-                }
-            });
-        } else {
-            /* TODO: Implement sweet and nice information/modal message */
-            window.alert('Password are different');
-        }
-    }
-    publicSignupCtrl.signup = signup;
+        modal.close.then(function(result) {
+            $state.go("^");
+        });
+    });
 });

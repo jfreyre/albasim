@@ -6,14 +6,42 @@
 	top:50%;
 	left:50%;
 	width:800px;
-	height:480px;
-	margin: -240px 0px 0px -400px;
+	height:580px;
+	margin: -290px 0px 0px -400px;
 	background-color:$white;
 	border-radius:8px;
 	z-index:100;
 	overflow-x:hidden;
 	overflow-y:auto;
 	transition:.5s;
+
+	&.modal--public-password{
+		width:360px;
+		height:210px;
+		margin: -140px 0px 0px -180px;
+
+	}
+	&.modal--public-signup{
+		width:400px;
+		height:540px;
+		margin: -270px 0px 0px -200px;
+		.form{
+			margin-top:8px;
+		}
+		.form__row{
+			margin:8px 4px;
+		}
+
+	}
+
+	&.modal--users {
+		.modal__tools {
+			a.button {
+				float: right;
+				margin-top: 8px;
+			}
+		}
+	}
 	@include material-shadow(2);
 
 	&.modal--open{
@@ -106,7 +134,7 @@
 	}
 	.modal__content{
 		width:100%;
-		height:301px;
+		height:401px;
 		box-sizing: border-box;
 		background: $background-default-secondary;
 		padding: 1em;
@@ -118,13 +146,13 @@
 			font-size: 18px;
 		}
 		&.modal__content--nav-off{
-			height:350px;
+			height:450px;
 		}
 		&.modal__content--tools-off{
-			height:366px;
+			height:466px;
 		}
 		&.modal__content--nav-tools-off{
-			height:415px;
+			height:515px;
 		}
 
 		.modal__content__colors{
@@ -138,7 +166,7 @@
 			display:block;
 			position:relative;
 			width:100%;
-			height:200px;
+			height:300px;
 			overflow-x:hidden;
 			overflow-y:auto;
 		}
@@ -152,6 +180,18 @@
 		border-top:solid 1px $border;
 		box-sizing: border-box;
 
+		.modal__tools__info{
+			margin:0px;
+			padding:0px;
+			height:48px;
+			line-height:48px;
+			color:$secondary-color;
+			i{
+				color:$secondary-color;
+				margin:0px 8px;
+			}
+		}
+
 		.modal__tools__message{
 			float:left;
 			margin:0px;
@@ -162,19 +202,19 @@
 			i{
 				color:$warning-color;
 			}
-			&.ng-enter, 
+			&.ng-enter,
             &.ng-leave
-            { 
+            {
                 transition: .3s;
-            } 
-             
-            &.ng-enter.ng-enter-active, 
+            }
+
+            &.ng-enter.ng-enter-active,
             &.ng-leave {
                 visibility:visible;
                 opacity: 1;
 
             }
-             
+
             &.ng-leave.ng-leave-active,
             &.ng-enter {
                 visibility:hidden;
@@ -207,6 +247,7 @@
 				}
 				input {
 					@include make-xs-column(9);
+					height: 36px;
 				}
 			}
 			.form__row:nth-child(2) {
@@ -228,11 +269,6 @@
 
 		.modal__tools {
 			padding: .5em 1em;
-			a.button:nth-child(1),
-			a.button:nth-child(2) {
-				float: right;
-			}
-
 		}
 	}
 	&.modal--join-team {
@@ -250,6 +286,9 @@
 		}
 	}
 	&.modal--archives{
+		.modal__content {
+			padding: 1em;
+		}
 		.modal__tools {
 			padding:8px 16px;
 			.button{
@@ -258,14 +297,14 @@
 		}
 	}
 
-	&.modal--customize{
+	&.modal--settings{
 		.modal__content{
         	@include make-row(0px);
         	padding:0px;
         	margin:0px;
 			.icon{
 				float:left;
-				margin:16px;
+				margin: 0 7px;
 				border:solid 0px white;
 				transition:.3s;
 				padding:6px 0px;
@@ -291,10 +330,10 @@
 				}
 			}
 			.color{
-				float:left;
-				margin:16px;
-				border:solid 0px white;
-				transition:.3s;
+				float: left;
+				margin: 16px;
+				border: 0px;
+				transition: .3s;
 
 				&:hover{
 					@include material-shadow();
@@ -310,15 +349,23 @@
 					cursor:default;
 				}
 			}
-			.infos--main{
+			.advanced {
+				@include make-xs-column(12);
+				h3 {
+					color: $danger-color;
+					font-weight: bold;
+					font-size: 1.5em;
+				}
+			}
+			.infos--main {
 		        @include make-xs-column(7);
 
 			}
-			.infos--secondary{
+			.infos--secondary {
 		        @include make-xs-column(5);
 			}
-			.infos--main, .infos--secondary{
-				.infos__label{
+			.infos--main, .infos--secondary {
+				.infos__label {
 					display:block;
 					padding:0px 24px;
 					margin:12px 0px 8px 0px;
@@ -334,6 +381,7 @@
 			}
 		}
 	}
+
 }
 
 .shadow{

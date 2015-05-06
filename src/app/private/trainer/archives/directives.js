@@ -10,6 +10,21 @@ angular.module('private.trainer.archives.directives', [])
     }).controller("TrainerArchivesIndexController", function TrainerArchivesIndexController($rootScope, $scope, SessionsModel, Flash) {
         var ctrl = this;
         ctrl.archives = [];
+        ctrl.sfilter = {
+            init: false,
+            search : ""
+        };
+        $scope.$watch(function(){
+            return ctrl.sfilter.search;
+        }, function(newSearch){
+            if(ctrl.sfilter.init){
+                $rootScope.$emit("changeSearch", newSearch);
+            }else{
+                ctrl.sfilter.search = $rootScope.search;
+                ctrl.sfilter.init = true;
+            }
+        });
+
 
         ctrl.updateSessions = function() {
             SessionsModel.getSessions("archived").then(function(response) {
@@ -53,21 +68,6 @@ angular.module('private.trainer.archives.directives', [])
             }
         };
 
-        ctrl.deleteArchivedSessions = function() {
-            if (ctrl.archives.length > 0) {
-                SessionsModel.deleteArchivedSessions().then(function(response) {
-                    if (!response.isErroneous()) {
-                        $rootScope.$emit('changeArchives', true);
-                        ctrl.updateSessions();
-                    }else{
-                        response.flash();
-                    }
-                });
-            } else {
-                Flash.danger("No scenario archived");
-            }
-        };
-
         /* Listen for new session */
         $rootScope.$on('changeArchives', function(e, hasNewData) {
             if (hasNewData) {
@@ -82,8 +82,12 @@ angular.module('private.trainer.archives.directives', [])
             scope: {
                 sessions: "=",
                 delete: "=",
-                unarchive: "="
+                unarchive: "=",
+                search: "="
             },
-            templateUrl: 'app/private/trainer/archives/directives.tmpl/list.html'
+            templateUrl: 'app/private/trainer/archives/directives.tmpl/list.html',
+            link: function(scope, elem, attrs){
+                scope.MAX_DISPLAYED_CHARS = MAX_DISPLAYED_CHARS;
+            }
         };
     });
