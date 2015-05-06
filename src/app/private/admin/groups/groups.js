@@ -1,4 +1,6 @@
-angular.module('private.admin.groups', [])
+angular.module('private.admin.groups', [
+    'private.admin.groups.edit'
+    ])
 .config(function ($stateProvider) {
     $stateProvider
         .state('wegas.private.admin.groups', {

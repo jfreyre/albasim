@@ -5,7 +5,7 @@
 	    	<div class="line line--primary">{{group.name | limitTo: 36}}<span ng-if="group.name.length > 36">...</span></div>
 	</div>
 	<div class="card__actions">
-	    <a class="button button--small button--round button--default-reverse button--label-off button--customize" title="Manage rights">
+	    <a class="button button--small button--round button--default-reverse button--label-off button--customize" title="Manage rights" ui-sref="wegas.private.admin.groups.edit({id: group.id})">
 	      <span class="button__label">Manage rights</span>
 	    </a>
 	    <a class="button button--small button--round button--danger-reverse button--label-off button--trash" title="Remove group">
