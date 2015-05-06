@@ -1,7 +1,7 @@
 angular.module('private.scenarist.directives', [
     'wegas.behaviours.repeat.autoload'
 ])
-    .controller('ScenaristIndexController', function ScenaristIndexController($scope, $rootScope, ScenariosModel, Flash) {
+    .controller('ScenaristIndexController', function ScenaristIndexController($scope, $rootScope, ScenariosModel) {
         var ctrl = this,
             initMaxScenariosDisplayed = function(){
                 if(ctrl.scenarios.length > 12){
@@ -12,8 +12,8 @@ angular.module('private.scenarist.directives', [
             };
         ctrl.scenarios = [];
         ctrl.archives = [];
-        ctrl.search = "";
-        $rootScope.$on("changeSearch", function(e, newSearch){
+        ctrl.search = '';
+        $rootScope.$on('changeSearch', function(e, newSearch){
             ctrl.search = newSearch;
         });
         $scope.$watch(function(){
@@ -24,7 +24,7 @@ angular.module('private.scenarist.directives', [
 
         ctrl.maxScenariosDisplayed = null;
         var updateDisplayScenarios = function(){
-                if(ctrl.maxScenariosDisplayed == null){
+                if(ctrl.maxScenariosDisplayed === null){
                     initMaxScenariosDisplayed();
                 }else{
                     if(ctrl.maxScenariosDisplayed >= ctrl.scenarios.length){
@@ -44,14 +44,14 @@ angular.module('private.scenarist.directives', [
             });
         };
         ctrl.updateScenarios = function(updateDisplay) {
-            ScenariosModel.getScenarios("BIN").then(function(response) {
+            ScenariosModel.getScenarios('BIN').then(function(response) {
                 if (response.isErroneous()) {
                     response.flash();
                 } else {
                     ctrl.archives = response.data || [];
                 }
             });
-            ScenariosModel.getScenarios("LIVE").then(function(response) {
+            ScenariosModel.getScenarios('LIVE').then(function(response) {
                 if (response.isErroneous()) {
                     response.flash();
                 } else {
@@ -79,7 +79,7 @@ angular.module('private.scenarist.directives', [
                     response.flash();
                 }
             });
-        }
+        };
         $rootScope.$on('changeLimit', function(e, hasNewData) {
             if (hasNewData) {
                 ctrl.updateScenarios(true);
@@ -97,35 +97,35 @@ angular.module('private.scenarist.directives', [
     .directive('scenaristScenariosIndex', function() {
         return {
             templateUrl: 'app/private/scenarist/directives.tmpl/index.html',
-            controller: "ScenaristIndexController as scenaristIndexCtrl"
+            controller: 'ScenaristIndexController as scenaristIndexCtrl'
         };
     })
     .directive('scenaristScenarioCreate', function(Flash) {
         return {
             templateUrl: 'app/private/scenarist/directives.tmpl/create.html',
             scope: {
-                scenarios: "=",
-                create: "="
+                scenarios: '=',
+                create: '='
             },
-            link: function(scope, elem, attrs) {
+            link: function(scope) {
                 var resetNewScenario = function() {
                     scope.newScenario = {
-                        name: "",
+                        name: '',
                         templateId: 0
                     };
                 };
                 scope.createScenario = function() {
-                    if (scope.newScenario.name !== "") {
+                    if (scope.newScenario.name !== '') {
                         if (scope.newScenario.templateId !== 0) {
                             scope.create(scope.newScenario.name, scope.newScenario.templateId);
                             resetNewScenario();
                         } else {
-                            Flash.danger("You need to choose a template scenario");
+                            Flash.danger('You need to choose a template scenario');
                         }
                     } else {
-                        Flash.danger("Name field can not be empty");
+                        Flash.danger('Name field can not be empty');
                     }
-                }
+                };
                 resetNewScenario();
             }
         };
@@ -145,11 +145,11 @@ angular.module('private.scenarist.directives', [
         return {
             templateUrl: 'app/private/scenarist/directives.tmpl/list.html',
             scope: {
-                scenarios:"=",
-                archives:"=",
-                archive:"=",
-                maximum:"=",
-                search:"="
+                scenarios:'=',
+                archives:'=',
+                archive:'=',
+                maximum:'=',
+                search:'='
             }
         };
     })
@@ -158,11 +158,11 @@ angular.module('private.scenarist.directives', [
             templateUrl: 'app/private/scenarist/directives.tmpl/card.html',
             scope: {
                 scenario: '=',
-                archive: "="
+                archive: '='
             },
-            link: function(scope, element, attrs) {
+            link: function(scope) {
                 scope.ServiceURL = ServiceURL;
                 scope.MAX_DISPLAYED_CHARS = MAX_DISPLAYED_CHARS;
             }
-        }
+        };
     });
