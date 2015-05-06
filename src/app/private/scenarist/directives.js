@@ -3,37 +3,37 @@ angular.module('private.scenarist.directives', [
 ])
     .controller('ScenaristIndexController', function ScenaristIndexController($scope, $rootScope, ScenariosModel) {
         var ctrl = this,
-            initMaxScenariosDisplayed = function(){
-                if(ctrl.scenarios.length > 12){
+            initMaxScenariosDisplayed = function() {
+                if (ctrl.scenarios.length > 12) {
                     ctrl.maxScenariosDisplayed = 10;
-                }else{
+                } else {
                     ctrl.maxScenariosDisplayed = ctrl.scenarios.length;
                 }
             };
         ctrl.scenarios = [];
         ctrl.archives = [];
         ctrl.search = '';
-        $rootScope.$on('changeSearch', function(e, newSearch){
+        $rootScope.$on('changeSearch', function(e, newSearch) {
             ctrl.search = newSearch;
         });
-        $scope.$watch(function(){
+        $scope.$watch(function() {
             return ctrl.search;
-        }, function(newSearch){
+        }, function(newSearch) {
             $rootScope.search = newSearch;
         });
 
         ctrl.maxScenariosDisplayed = null;
-        var updateDisplayScenarios = function(){
-                if(ctrl.maxScenariosDisplayed === null){
-                    initMaxScenariosDisplayed();
-                }else{
-                    if(ctrl.maxScenariosDisplayed >= ctrl.scenarios.length){
-                        ctrl.maxScenariosDisplayed = ctrl.scenarios.length;
-                    }else{
-                        ctrl.maxScenariosDisplayed = ctrl.maxScenariosDisplayed + 5;
-                    }
+        var updateDisplayScenarios = function() {
+            if (ctrl.maxScenariosDisplayed === null) {
+                initMaxScenariosDisplayed();
+            } else {
+                if (ctrl.maxScenariosDisplayed >= ctrl.scenarios.length) {
+                    ctrl.maxScenariosDisplayed = ctrl.scenarios.length;
+                } else {
+                    ctrl.maxScenariosDisplayed = ctrl.maxScenariosDisplayed + 5;
                 }
-            };
+            }
+        };
         ctrl.uploadJSON = function(element) {
             ScenariosModel.createFromJSON(element.files[0]).then(function(response) {
                 if (!response.isErroneous()) {
@@ -56,7 +56,7 @@ angular.module('private.scenarist.directives', [
                     response.flash();
                 } else {
                     ctrl.scenarios = response.data || [];
-                    if(updateDisplay){
+                    if (updateDisplay) {
                         updateDisplayScenarios();
                     }
                 }
@@ -130,12 +130,12 @@ angular.module('private.scenarist.directives', [
             }
         };
     })
-    .directive('scenaristScenarioCreateUpload', function () {
+    .directive('scenaristScenarioCreateUpload', function() {
         return {
             restrict: 'A',
             require: '^scenaristScenariosIndex',
             link: function(scope, element, attrs, parentCtrl) {
-                element.bind('change', function(){
+                element.bind('change', function() {
                     parentCtrl.uploadJSON(element[0]);
                 });
             }
@@ -145,11 +145,11 @@ angular.module('private.scenarist.directives', [
         return {
             templateUrl: 'app/private/scenarist/directives.tmpl/list.html',
             scope: {
-                scenarios:'=',
-                archives:'=',
-                archive:'=',
-                maximum:'=',
-                search:'='
+                scenarios: '=',
+                archives: '=',
+                archive: '=',
+                maximum: '=',
+                search: '='
             }
         };
     })
