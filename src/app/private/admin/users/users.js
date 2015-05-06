@@ -1,6 +1,6 @@
 angular.module('private.admin.users', [
-    'private.admin.users.directives',
-    'wegas.behaviours.modals'
+    'wegas.behaviours.repeat.autoload',
+    'private.admin.users.edit'
 ])
     .config(function($stateProvider) {
         $stateProvider
@@ -12,53 +12,64 @@ angular.module('private.admin.users', [
                         templateUrl: 'app/private/admin/users/users.tmpl.html'
                     }
                 }
-            })
-            .state('wegas.private.admin.users.edit', {
-                url: '/:id',
-                views: {
-                    'modal@wegas.private': {
-                        controller: 'AdminUserEditController',
-                    },
-                    'workspace@wegas.private.admin': {
-                        controller: 'AdminGroupsCtrl as adminGroupsCtrl',
-                        templateUrl: 'app/private/admin/groups/groups.tmpl.html'
+            });
+    })
+    .controller('AdminUsersCtrl', function AdminUsersCtrl($state, $rootScope, Auth, ViewInfos, UsersModel) {
+        var ctrl = this,
+        initMaxUsersDisplayed = function() {
+            if (ctrl.users.length > 12) {
+                ctrl.maxUsersDisplayed = 10;
+            } else {
+                ctrl.maxUsersDisplayed = ctrl.users.length;
+            }
+        };
+        ctrl.maxUsersDisplayed = null;
+        ctrl.users = [];
+        ctrl.search = "";
+
+        ctrl.updateDisplay = function() {
+            if (ctrl.maxUsersDisplayed == null) {
+                initMaxUsersDisplayed();
+            }
+            if (ctrl.maxUsersDisplayed >= ctrl.users.length) {
+                ctrl.maxUsersDisplayed = ctrl.users.length;
+            } else {
+                ctrl.maxUsersDisplayed += 15;
+            }
+
+        };
+
+        ctrl.updateUsersList = function(displayUp) {
+            UsersModel.getUsers().then(function(response) {
+                if (response.isErroneous()) {
+                    response.flash();
+                } else {
+                    ctrl.users = response.data || [];
+                    if(displayUp){
+                        ctrl.updateDisplay();
                     }
                 }
             });
-    })
-    .controller('AdminUsersCtrl', function AdminUsersCtrl($state, Auth, ViewInfos) {
+        };
 
-        Auth.getAuthenticatedUser().then(function(user) {
-            if (user != null) {
-                if (!user.isAdmin) {
-                    $state.go("wegas.private.scenarist");
+        ctrl.deleteUser = function(id) {
+            UsersModel.getUser(id).then(function(response) {
+                if (!response.isErroneous()) {
+                    var user = response.data;
+                    UsersModel.deleteUser(user).then(function (response) {
+                        response.flash();
+                        ctrl.updateUsersList();
+                    });
                 }
-                ViewInfos.editName("Admin workspace");
+            });
+        };
+
+        $rootScope.$on('changeLimit', function(e, hasNewData) {
+            if (hasNewData) {
+                ctrl.updateUsersList(true);
             }
         });
+
+        ctrl.updateUsersList(true); 
     })
-    .controller("AdminUserEditController", function AdminUserEditController($animate, $state, ModalService, Auth) {
-            Auth.getAuthenticatedUser().then(function(user) {
-                    if (user != null) {
-                        if (user.isAdmin) {
-                            ModalService.showModal({
-                                templateUrl: 'app/private/admin/users/directives.tmpl/modal.html',
-                                controller: "ModalsController as modalsCtrl"
-                            }).then(function(modal) {
-                                var box = $(".modal"),
-                                    shadow = $(".shadow");
-
-                                $('body').addClass('modal-displayed');
-                                $animate.addClass(box, "modal--open");
-                                $animate.addClass(shadow, "shadow--show");
-
-                                modal.close.then(function(result) {
-                                    $('body').removeClass('modal-displayed');
-                                    $state.go("^");
-                                });
-                            });
-                        }
-                    }
-            });
-
-    });
+;
