@@ -1,4 +1,4 @@
-angular.module('private.admin.users.directives', [])
+angular.module('private.admin.users.edit.directives', [])
     .directive('adminUsersEditIndex', function() {
         return {
             scope:{

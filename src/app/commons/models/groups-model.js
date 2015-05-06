@@ -1,10 +1,31 @@
 'use strict';
 angular.module('wegas.models.groups', [])
-    .service('GroupsModel', function($http, $q, Responses, Auth) {
+    .service('GroupsModel', function($http, $q, $interval, Responses, Auth) {
         var model = this,
             groups = null,
             loadingGroups = false;
-            /* Cache all scenarios in a list */
+
+            /* Cache a group, passing the group to add in parameter */
+            cacheGroup = function(group) {
+                if (group && groups) {
+                    if (!_.find(groups, group)) {
+                        groups.push(group);
+                    }
+                }
+                return groups;
+            },
+
+            /* Uncache a group, passing a group to remove in parameter */
+            uncacheGroup = function(group) {
+                if (groups && group) {
+                    groupToUncache = _.find(groups, function(g){ return g.id == group.id });
+                    if (groupToUncache) {
+                        groups = _.without(groups, groupToUncache);
+                    }
+                }
+                return groups;
+            },
+            /* Cache all groups in a list */
             cacheGroups = function(){
                 var deferred = $q.defer(),
                 	url = "rest/Role";
@@ -114,4 +135,105 @@ angular.module('wegas.models.groups', [])
             }
             return deferred.promise;
         };
+
+        model.addGroup = function(name) {
+            var deferred = $q.defer(),
+                groupToAdd = {
+                "id":"",
+                "@class":"Role",
+                "name":name,
+                "permissions":[]
+            };
+
+            $http.post(ServiceURL + "rest/Role", groupToAdd, {
+                "headers": {
+                    "managed-mode": "true"
+                }
+            })
+                .success(function(data) {
+                    if (data.events !== undefined && data.events.length == 0) {
+                        var newGroup = data.entities[0];
+                        cacheGroup(newGroup);
+                        deferred.resolve(Responses.success('New group', newGroup));
+                    } else if (data.events !== undefined) {
+                        deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                    } else {
+                        deferred.resolve(Responses.danger("Whoops...", false));
+                    };
+                }).error(function(data) {
+                    if (data.events !== undefined && data.events.length > 0) {
+                        deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                    } else {
+                        deferred.resolve(Responses.danger("Whoops...", false));
+                    }
+                });
+            return deferred.promise;
+        };
+
+        model.updateGroup = function(group) {
+            var deferred = $q.defer();
+
+            var url = "rest/Role/" + group.id;
+            $http
+                .put(ServiceURL + url, group, {
+                    "headers": {
+                        "managed-mode": "true"
+                    }
+                })
+                .success(function(data) {
+                    if (data.events !== undefined && data.events.length == 0) {
+                        groups = uncacheGroup(group);
+                        groups = cacheGroup(group);
+                        deferred.resolve(Responses.success("Group updated", data.entities));
+                    } else if (data.events !== undefined) {
+                        deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                    } else {
+                        deferred.resolve(Responses.danger("Whoops...", false));
+                    }
+                }).error(function(data) {
+                    if (data.events !== undefined && data.events.length > 0) {
+                        deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                    } else {
+                        deferred.resolve(Responses.danger("Whoops...", false));
+                    }
+                });
+            return deferred.promise;
+        }
+
+        model.deleteGroup = function(group) {
+            var deferred = $q.defer();
+
+            var url = "rest/Role/" + group.id;
+
+            $http
+                .delete(ServiceURL + url, {
+                    "headers": {
+                        "managed-mode": "true"
+                    }
+                })
+                .success(function(data) {
+                    if (data.events !== undefined && data.events.length == 0) {
+                        groups = uncacheGroup(group);
+                        deferred.resolve(Responses.success("Group deleted", data.entities));
+                    } else if (data.events !== undefined) {
+                        deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                    } else {
+                        deferred.resolve(Responses.danger("Whoops...", false));
+                    }
+                }).error(function(data) {
+                    if (data.events !== undefined && data.events.length > 0) {
+                        deferred.resolve(Responses.danger(data.events[0].exceptions[0].message, false));
+                    } else {
+                        deferred.resolve(Responses.danger("Whoops...", false));
+                    }
+                });
+
+
+            return deferred.promise;
+        }
+
+
+
+
+        
     });

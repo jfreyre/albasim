@@ -17,10 +17,35 @@ angular.module('private.admin.groups', [
 .controller('AdminGroupsCtrl', function AdminGroupsCtrl(GroupsModel) {
     var ctrl = this;
     ctrl.groups = [];
+    ctrl.newGroup = {
+        name: ""
+    };
     ctrl.updateGroups = function(){
         GroupsModel.getGroups().then(function(response){
             if(!response.isErroneous()){
                 ctrl.groups = response.data;
+            }else{
+                response.flash();
+            }
+        });
+    };
+
+    ctrl.addGroup = function(){
+        GroupsModel.addGroup(ctrl.newGroup.name).then(function(response){
+            if(!response.isErroneous()){
+                ctrl.newGroup = {
+                    name: ""
+                };
+                ctrl.updateGroups();
+            }else{
+                response.flash();
+            }
+        });
+    };
+    ctrl.removeGroup = function(group){
+        GroupsModel.deleteGroup(group).then(function(response){
+            if(!response.isErroneous()){
+                ctrl.updateGroups();
             }else{
                 response.flash();
             }

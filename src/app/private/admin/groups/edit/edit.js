@@ -1,4 +1,5 @@
 angular.module('private.admin.groups.edit', [
+	'private.admin.groups.edit.directives'
     ])
     .config(function($stateProvider) {
         $stateProvider

@@ -1,5 +1,5 @@
 angular.module('private.admin.users.edit', [
-    'private.admin.users.directives'
+    'private.admin.users.edit.directives'
     ])
     .config(function($stateProvider) {
         $stateProvider
