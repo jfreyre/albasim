@@ -1,6 +1,5 @@
 angular.module('private.admin', [
     'wegas.models.groups',
-    'private.admin.directives',
     'private.admin.users',
     'private.admin.groups'
 
@@ -12,13 +11,15 @@ angular.module('private.admin', [
             views: {
                 'workspace': {
                     controller: 'AdminCtrl as adminCtrl',
-                    templateUrl: 'app/private/admin/directives.tmpl/index.html'
+                    templateUrl: 'app/private/admin/admin.tmpl.html'
                 }
             }
         })
     ;
 })
 .controller('AdminCtrl', function AdminCtrl($state, Auth, ViewInfos) {
+    var ctrl = this;
+        ctrl.serviceUrl = ServiceURL;
     Auth.getAuthenticatedUser().then(function(user){
         if(user != null){
             if(!user.isAdmin){
