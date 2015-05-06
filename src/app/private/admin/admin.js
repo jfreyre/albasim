@@ -19,7 +19,6 @@ angular.module('private.admin', [
     ;
 })
 .controller('AdminCtrl', function AdminCtrl($state, Auth, ViewInfos) {
-    var trainerCtrl = this;
     Auth.getAuthenticatedUser().then(function(user){
         if(user != null){
             if(!user.isAdmin){
