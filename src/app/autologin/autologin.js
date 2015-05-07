@@ -4,7 +4,7 @@ angular.module('autologin', [
 .config(function ($stateProvider) {
     $stateProvider
         .state('wegas.autologin', {
-            url: 'start/:token',
+            url: 'play/:token',
             views: {
                 'main@': {
                     controller: 'AutologinCtrl as autologinCtrl',
@@ -29,46 +29,39 @@ angular.module('autologin', [
                 }
             });
         };
-    
-    Auth.getAuthenticatedUser().then(function(user){
-        if(user){
-            SessionsModel.findSessionToJoin($stateParams.token).then(function(responseToken){
-                if(!responseToken.isErroneous()){
+    SessionsModel.findSessionToJoin($stateParams.token).then(function(responseToken){
+        if(!responseToken.isErroneous()){
+            Auth.getAuthenticatedUser().then(function(user){
+                if(user){
                     var session = responseToken.data;
                     SessionsModel.getSession("played", session.id).then(function(responsePlayedSession){
                         if(!responsePlayedSession.isErroneous()){
                             window.location.href = ServiceURL + "game-play.html?gameId=" + session.id;
-                        }else{
+                        } else {
                             if(session.properties.freeForAll){
                                 joinIndividualSession(session);
-                            }else{
+                            } else {
                                 $state.go("wegas.private.player.join", {'token': $stateParams.token});                    
                             }
                         }
                     });
-                }else{
-                    errorRedirect(responseToken);
-                }
-            });
-        }else{
-            SessionsModel.findSessionToJoin($stateParams.token).then(function(responseToken){
-                if(!responseToken.isErroneous()){
+                } else {
                     var session = responseToken.data;
                     Auth.loginAsGuest().then(function(responseAuth){
                         if(!responseAuth.isErroneous()){
                             if(session.properties.freeForAll){
                                 joinIndividualSession(session);
-                            }else{
+                            } else {
                                 $state.go("wegas.private.player.join", {'token': $stateParams.token});                    
                             }
-                        }else{
+                        } else {
                             errorRedirect(responseToken);
                         }
                     });
-                }else{
-                    errorRedirect(responseToken);
                 }
-            });
+            });            
+        } else {
+            errorRedirect(responseToken);
         }
     });
 });
