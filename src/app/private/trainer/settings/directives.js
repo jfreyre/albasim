@@ -51,7 +51,7 @@ angular.module('private.trainer.settings.directives', [
                     var icon = ctrl.session.properties.iconUri.split("_");
                     if (icon.length >= 3 && icon[0] == "ICON") {
                         ctrl.infos.color = icon[1];
-                        ctrl.infos.icon = icon[2];
+                        ctrl.infos.icon.key = icon[2];
                         if(icon[3]){
                             ctrl.infos.icon.library = icon[3];
                         }
