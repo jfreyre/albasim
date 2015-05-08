@@ -1,8 +1,22 @@
 angular.module('wegas.service.customize', [])
 .factory('Customize', function(Flash) {
 	var colors = [
-		'orange', 'blue', 'red', 'yellow', 
-		'purple','pink', 'green', 'grey'
+		'white-orange', 'light-orange', 'orange', 'dark-orange', 'black-orange',
+		'white-red', 'light-red', 'red', 'dark-red', 'black-red',
+		'white-bluepurple', 'light-bluepurple', 'bluepurple', 'dark-bluepurple', 'black-bluepurple',
+		'white-greenblue', 'light-greenblue', 'greenblue', 'dark-greenblue', 'black-greenblue',
+		'white-grey', 'light-grey', 'grey', 'dark-grey', 'black-grey',
+		'white-yellow', 'light-yellow', 'yellow', 'dark-yellow', 'black-yellow',
+		'white-purple', 'light-purple', 'purple', 'dark-purple', 'black-purple',
+		'white-blue', 'light-blue', 'blue', 'dark-blue', 'black-blue',
+		'white-greenyellow', 'light-greenyellow', 'greenyellow', 'dark-greenyellow', 'black-greenyellow',
+		'white-brown', 'light-brown', 'brown', 'dark-brown', 'black-brown',
+		'white-orangine', 'light-orangine', 'orangine', 'dark-orangine', 'black-orangine',
+		'white-pink', 'light-pink', 'pink', 'dark-pink', 'black-pink',
+
+		'white-ocean', 'light-ocean', 'ocean', 'dark-ocean', 'black-ocean',
+		'white-green', 'light-green', 'green', 'dark-green', 'black-green',
+		'white-wine', 'light-wine', 'wine', 'dark-wine', 'black-wine',
 		],
 		icons = [
 			{name: "Game", key: "gamepad", library: "fa"},
