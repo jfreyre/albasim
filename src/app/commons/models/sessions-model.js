@@ -48,15 +48,6 @@ angular.module('wegas.models.sessions', [])
                     }
                     return deferred.promise;
                 },
-                findSessionAnyWhere: function(id, withTrainers) {
-                    var deferred = $q.defer();
-
-                    for (var i = sessions.cache.length - 1; i >= 0; i--) {
-
-                    };
-
-                    return deferred.promise;
-                },
                 stopWaiting: function(waitFunction) {
                     $interval.cancel(waitFunction);
                 },
