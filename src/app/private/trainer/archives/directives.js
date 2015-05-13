@@ -56,14 +56,21 @@ angular.module('private.trainer.archives.directives', [])
 
         ctrl.showSettings = function(session) {
             if (session) {
-
                 $scope.close();
                 $timeout(function() {
                     $state.go('wegas.private.trainer.archives.settings', {id: session.id});
                 }, 1500);
+            } else {
+                Flash.danger("No session choosed");
+            }
+        };
 
-
-
+        ctrl.showUsers = function(session) {
+            if (session) {
+                $scope.close();
+                $timeout(function() {
+                    $state.go('wegas.private.trainer.archives.users', {id: session.id});
+                }, 1500);
             } else {
                 Flash.danger("No session choosed");
             }
@@ -85,7 +92,8 @@ angular.module('private.trainer.archives.directives', [])
                 delete: "=",
                 unarchive: "=",
                 search: "=",
-                details: "="
+                details: "=",
+                users: "="
             },
             templateUrl: 'app/private/trainer/archives/directives.tmpl/list.html',
             link: function(scope, elem, attrs){
