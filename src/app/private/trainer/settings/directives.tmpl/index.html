@@ -15,7 +15,7 @@
 </div>
 <div 	ng-if="settingsIndexCtrl.tabs.infos"
 		class="modal__content"
-        ng-class="{'modal__content--tools-off': (settingsIndexCtrl.kindsOfSession == 'managed')}"
+        ng-class="{'modal__content--tools-off': (settingsIndexCtrl.kindsOfSession != 'managed')}"
 		active-infos="settingsIndexCtrl.infos"
 		check-change="settingsIndexCtrl.checkChanges"
         is-readonly="settingsIndexCtrl.isReadonly"
