@@ -495,31 +495,21 @@ angular.module('wegas.models.sessions', [])
             return deferred.promise;
         };
 
-        model.updateSession = function(id, infosToSet) {
-            var deferred = $q.defer(),
-                checkToken = /^[A-Za-z0-9\-]+$/;
-            if (id && infosToSet) {
-                sessions.findSession("managed", id).then(function(sessionBeforeChange) {
-                    if (sessionBeforeChange) {
-                        if (infosToSet.token.match(checkToken)) {
-                            updateGameSession(infosToSet, sessionBeforeChange).then(function(responseGame) {
-                                if (!responseGame.isErroneous()) {
-                                    updateGameModelSession(infosToSet, responseGame.data).then(function(responseGameModel) {
-                                        if (!responseGameModel.isErroneous()) {
-                                            deferred.resolve(Responses.success("Session up-to-date", responseGameModel.data));
-                                        } else {
-                                            deferred.resolve(responseGameModel);
-                                        }
-                                    });
-                                } else {
-                                    deferred.resolve(responseGame);
-                                }
-                            });
-                        } else {
-                            deferred.resolve(Responses.danger("Invalid character in token, only alphanumeric character allowed.", false));
-                        }
+        model.updateSession = function(session, infosToSet) {
+            var deferred = $q.defer();
+            if (session && infosToSet) {
+                updateGameSession(infosToSet, session).then(function(responseGame) {
+                    if (!responseGame.isErroneous()) {
+                        updateGameModelSession(infosToSet, responseGame.data).then(function(responseGameModel) {
+
+                            if (!responseGameModel.isErroneous()) {
+                                deferred.resolve(Responses.success("Session up-to-date", responseGameModel.data));
+                            } else {
+                                deferred.resolve(responseGameModel);
+                            }
+                        });
                     } else {
-                        deferred.resolve(Responses.danger("No session to update", false));
+                        deferred.resolve(responseGame);
                     }
                 });
             } else {
@@ -587,53 +577,49 @@ angular.module('wegas.models.sessions', [])
         };
 
         /* Add a new trainer to the session */
-        model.addTrainerToSession = function(sessionId, trainer) {
+        model.addTrainerToSession = function(session, trainer) {
             var deferred = $q.defer();
-            sessions.findSession("managed", sessionId).then(function(session) {
-                if (session) {
-                    var alreadyIn = false;
-                    session.trainers.forEach(function(elem) {
-                        if (elem.id == trainer.id) {
-                            alreadyIn = true;
-                        }
-                    });
-                    if (!alreadyIn) {
-                        $http.post(ServiceURL + "rest/Extended/User/addAccountPermission/Game:View,Edit:g" + session.id + "/" + trainer.id).success(function(data) {
-                            session.trainers.push(trainer);
-                            deferred.resolve(Responses.success("Trainer added", trainer));
-                        }).error(function(data) {
-                            deferred.resolve(Responses.danger("Error for adding trainer", false));
-                        });
-                    } else {
-                        deferred.resolve(Responses.info("This user is already a trainer for this session", false));
+            if (session) {
+                var alreadyIn = false;
+                session.trainers.forEach(function(elem) {
+                    if (elem.id == trainer.id) {
+                        alreadyIn = true;
                     }
+                });
+                if (!alreadyIn) {
+                    $http.post(ServiceURL + "rest/Extended/User/addAccountPermission/Game:View,Edit:g" + session.id + "/" + trainer.id).success(function(data) {
+                        session.trainers.push(trainer);
+                        deferred.resolve(Responses.success("Trainer added", trainer));
+                    }).error(function(data) {
+                        deferred.resolve(Responses.danger("Error for adding trainer", false));
+                    });
                 } else {
-                    deferred.resolve(Responses.danger("No access to this session", false));
+                    deferred.resolve(Responses.info("This user is already a trainer for this session", false));
                 }
-            });
+            } else {
+                deferred.resolve(Responses.danger("No access to this session", false));
+            }
             return deferred.promise;
         };
 
         /* Remove a trainer from a session in cached sessions et persistant datas */
-        model.removeTrainerToSession = function(sessionId, trainerId) {
+        model.removeTrainerToSession = function(session, trainerId) {
             var deferred = $q.defer();
-            sessions.findSession("managed", sessionId).then(function(session) {
-                if (session) {
-                    trainer = _.find(session.trainers, function(t) {
-                        return t.id == trainerId;
+            if (session) {
+                trainer = _.find(session.trainers, function(t) {
+                    return t.id == trainerId;
+                });
+                if (trainer) {
+                    $http.delete(ServiceURL + "rest/Extended/User/DeleteAccountPermissionByInstanceAndAccount/g" + session.id + "/" + trainer.id).success(function(data) {
+                        session.trainers = _.without(session.trainers, trainer);
+                        deferred.resolve(Responses.success("Trainer removed", trainer));
+                    }).error(function(data) {
+                        deferred.resolve(Responses.danger("You can not remove this trainer", data));
                     });
-                    if (trainer) {
-                        $http.delete(ServiceURL + "rest/Extended/User/DeleteAccountPermissionByInstanceAndAccount/g" + session.id + "/" + trainer.id).success(function(data) {
-                            session.trainers = _.without(session.trainers, trainer);
-                            deferred.resolve(Responses.success("Trainer removed", trainer));
-                        }).error(function(data) {
-                            deferred.resolve(Responses.danger("You can not remove this trainer", data));
-                        });
-                    }
-                } else {
-                    deferred.resolve(Response.danger("You have no accesss to this session", false));
                 }
-            });
+            } else {
+                deferred.resolve(Response.danger("No access to this session", false));
+            }
             return deferred.promise;
         };
 

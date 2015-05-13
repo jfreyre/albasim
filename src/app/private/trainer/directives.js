@@ -29,16 +29,6 @@ angular.module('private.trainer.directives', [
             };
         ctrl.loading = true;
         ctrl.search = "";
-        $rootScope.$on("changeSearch", function(e, newSearch) {
-            ctrl.search = newSearch;
-        });
-
-        $scope.$watch(function() {
-            return ctrl.search;
-        }, function(newSearch) {
-            $rootScope.search = newSearch;
-        });
-
         ctrl.sessions = [];
         ctrl.nbArchives = 0;
         ctrl.maxSessionsDisplayed = null;

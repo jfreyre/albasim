@@ -9,7 +9,7 @@ angular.module('private.trainer.users.directives', [
             templateUrl: 'app/private/trainer/users/directives.tmpl/index.html',
             controller: "TrainerUsersIndexCtrl as usersIndexCtrl"
         };
-    }).controller("TrainerUsersIndexCtrl", function TrainerUsersIndexCtrl($stateParams, SessionsModel, Flash) {
+    }).controller("TrainerUsersIndexCtrl", function TrainerUsersIndexCtrl($state, $stateParams, SessionsModel, Flash) {
         var ctrl = this;
         ctrl.session = {},
         ctrl.MAX_DISPLAYED_CHARS = MAX_DISPLAYED_CHARS;
@@ -17,8 +17,10 @@ angular.module('private.trainer.users.directives', [
 
         ctrl.playersViewActived = true;
 
+        ctrl.kindsOfSession = ($state.$current.name == "wegas.private.trainer.users") ? "managed" : "archived";
+
         ctrl.refreshSession = function () {
-            SessionsModel.refreshSession("managed", ctrl.session).then(function(response) {
+            SessionsModel.refreshSession(ctrl.kindsOfSession, ctrl.session).then(function(response) {
                 if (!response.isErroneous()) {
                     ctrl.session = response.data;
                 } else {
@@ -27,7 +29,7 @@ angular.module('private.trainer.users.directives', [
             });
         };
         ctrl.updateSession = function() {
-            SessionsModel.getSession("managed", $stateParams.id, true).then(function(response) {
+            SessionsModel.getSession(ctrl.kindsOfSession, $stateParams.id, true).then(function(response) {
                 ctrl.session = response.data || {};
                 if (response.isErroneous()) {
                     response.flash();
@@ -44,7 +46,7 @@ angular.module('private.trainer.users.directives', [
         };
 
         ctrl.addTrainer = function(selection) {
-            SessionsModel.addTrainerToSession($stateParams.id, selection).then(function(response) {
+            SessionsModel.addTrainerToSession(ctrl.session, selection).then(function(response) {
                 if (!response.isErroneous()) {
                     ctrl.updateSession();
                 }else{
@@ -53,7 +55,7 @@ angular.module('private.trainer.users.directives', [
             });
         }
         ctrl.removeTrainer = function(trainerId) {
-            SessionsModel.removeTrainerToSession($stateParams.id, trainerId).then(function(response) {
+            SessionsModel.removeTrainerToSession(ctrl.session, trainerId).then(function(response) {
                 if (!response.isErroneous()) {
                     ctrl.updateSession();
                 }else{

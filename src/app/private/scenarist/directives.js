@@ -13,14 +13,6 @@ angular.module('private.scenarist.directives', [
         ctrl.scenarios = [];
         ctrl.nbArchives = [];
         ctrl.search = '';
-        $rootScope.$on('changeSearch', function(e, newSearch) {
-            ctrl.search = newSearch;
-        });
-        $scope.$watch(function() {
-            return ctrl.search;
-        }, function(newSearch) {
-            $rootScope.search = newSearch;
-        });
 
         ctrl.maxScenariosDisplayed = null;
         var updateDisplayScenarios = function() {
