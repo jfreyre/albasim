@@ -9,7 +9,7 @@ angular.module('private.trainer.settings.directives', [
             templateUrl: 'app/private/trainer/settings/directives.tmpl/index.html',
             controller: "TrainerSettingsIndexController as settingsIndexCtrl"
         };
-    }).controller("TrainerSettingsIndexController", function TrainerSettingsIndexController($rootScope, $scope, $stateParams, SessionsModel, Flash) {
+    }).controller("TrainerSettingsIndexController", function TrainerSettingsIndexController($rootScope, $scope, $state, $stateParams, SessionsModel, Flash) {
         var ctrl = this,
             initTabs = function() {
                 return {
@@ -41,10 +41,12 @@ angular.module('private.trainer.settings.directives', [
             individual: false
         };
         ctrl.tabs = initTabs();
-            
+
+        ctrl.kindsOfSession = ($state.$current.name == "wegas.private.trainer.settings") ? "managed" : "archived";
+
         ctrl.updateSession = function() {
-            SessionsModel.getSession("managed", $stateParams.id, true).then(function(response) {
-                ctrl.session = response.data || {};                
+            SessionsModel.getSession(ctrl.kindsOfSession, $stateParams.id, true).then(function(response) {
+                ctrl.session = response.data || {};
                 if (response.isErroneous()) {
                     response.flash();
                 }else{
@@ -118,7 +120,7 @@ angular.module('private.trainer.settings.directives', [
         }
 
         ctrl.save = function() {
-            SessionsModel.updateSession(ctrl.session.id, ctrl.infos).then(function(response){
+            SessionsModel.updateSession(ctrl.session, ctrl.infos).then(function(response){
                 if(!response.isErroneous()){
                     $rootScope.$emit("changeSessions", true);
                     $scope.close();
