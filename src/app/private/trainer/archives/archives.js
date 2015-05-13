@@ -1,5 +1,6 @@
 angular.module('private.trainer.archives', [
-    'private.trainer.archives.directives'
+    'private.trainer.archives.directives',
+    'private.trainer.settings'
 ])
     .config(function($stateProvider) {
         $stateProvider
@@ -10,7 +11,15 @@ angular.module('private.trainer.archives', [
                         controller: 'TrainerArchivesController'
                     }
                 }
-            });
+            })
+            .state('wegas.private.trainer.archives.settings', {
+                url: '/:id/settings',
+                views: {
+                    'modal@wegas.private': {
+                        controller: 'TrainerSettingsController'
+                    }
+                }
+            });;
     }).controller("TrainerArchivesController", function TrainerArchivesController($animate, $state, ModalService) {
         ModalService.showModal({
             templateUrl: 'app/private/trainer/archives/archives.tmpl.html',
