@@ -7,7 +7,7 @@ angular.module('private.trainer.archives.directives', [])
             templateUrl: 'app/private/trainer/archives/directives.tmpl/index.html',
             controller: "TrainerArchivesIndexController as trainerArchivesIndexController"
         };
-    }).controller("TrainerArchivesIndexController", function TrainerArchivesIndexController($rootScope, $scope, SessionsModel, Flash) {
+    }).controller("TrainerArchivesIndexController", function TrainerArchivesIndexController($timeout, $rootScope, $scope, $state, SessionsModel, Flash) {
         var ctrl = this;
         ctrl.archives = [];
         ctrl.sfilter = {
@@ -64,7 +64,22 @@ angular.module('private.trainer.archives.directives', [])
                     }
                 });
             } else {
-                Flash.danger("No scenario choosed");
+                Flash.danger("No session choosed");
+            }
+        };
+
+        ctrl.showSettings = function(session) {
+            if (session) {
+
+                $scope.close();
+                $timeout(function() {
+                    $state.go('wegas.private.trainer.archives.settings', {id: session.id});
+                }, 1500);
+
+
+
+            } else {
+                Flash.danger("No session choosed");
             }
         };
 
@@ -83,7 +98,8 @@ angular.module('private.trainer.archives.directives', [])
                 sessions: "=",
                 delete: "=",
                 unarchive: "=",
-                search: "="
+                search: "=",
+                details: "="
             },
             templateUrl: 'app/private/trainer/archives/directives.tmpl/list.html',
             link: function(scope, elem, attrs){

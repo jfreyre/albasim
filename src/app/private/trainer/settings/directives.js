@@ -42,9 +42,12 @@ angular.module('private.trainer.settings.directives', [
         };
         ctrl.tabs = initTabs();
             
+        ctrl.kindsOfSession = ($state.$current.name == "wegas.private.trainer.settings") ? "managed" : "archived";
+        ctrl.isReadonly = (ctrl.kindsOfSession != 'managed');
+
         ctrl.updateSession = function() {
-            SessionsModel.getSession("managed", $stateParams.id, true).then(function(response) {
-                ctrl.session = response.data || {};                
+            SessionsModel.getSession(ctrl.kindsOfSession, $stateParams.id, true).then(function(response) {
+                ctrl.session = response.data || {};
                 if (response.isErroneous()) {
                     response.flash();
                 }else{
@@ -160,7 +163,8 @@ angular.module('private.trainer.settings.directives', [
     .directive('trainerSessionsCustomizeInfos', function() {
         return {
             scope:{
-                activeInfos: "="
+                activeInfos: "=",
+                isReadonly: "="
             },
             templateUrl: 'app/private/trainer/settings/directives.tmpl/infos-form.html'
         }
