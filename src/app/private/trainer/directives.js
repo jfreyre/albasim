@@ -33,15 +33,6 @@ angular.module('private.trainer.directives', [
             all: true
         };
         ctrl.search = "";
-        $rootScope.$on("changeSearch", function(e, newSearch) {
-            ctrl.search = newSearch;
-        });
-        $scope.$watch(function() {
-            return ctrl.search;
-        }, function(newSearch) {
-            $rootScope.search = newSearch;
-        });
-
         ctrl.sessions = [];
         ctrl.archives = [];
         ctrl.maxSessionsDisplayed = null;
