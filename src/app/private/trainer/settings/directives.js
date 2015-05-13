@@ -174,10 +174,17 @@ angular.module('private.trainer.settings.directives', [
             templateUrl: 'app/private/trainer/settings/directives.tmpl/icons-picker.html',
             scope: {
                 activeIcon: "=",
-                change: "="
+                change: "=",
+                isReadonly: "="
             },
             link: function(scope, element, attrs) {
                 scope.icons = Customize.iconsPalette();
+
+                scope.changeIcon = function (key, library) {
+                    if (!scope.isReadonly) {
+                        scope.change(key, library);
+                    }
+                };
             }
         }
     })
@@ -186,10 +193,17 @@ angular.module('private.trainer.settings.directives', [
             templateUrl: 'app/private/trainer/settings/directives.tmpl/colors-picker.html',
             scope: {
                 activeColor: "=",
-                change: "="
+                change: "=",
+                isReadonly: "="
             },
             link: function(scope, element, attrs) {
                 scope.colors = Customize.colorsPalette();
+
+                scope.changeColor = function (color) {
+                    if (!scope.isReadonly) {
+                        scope.change(color);
+                    }
+                };
             }
         }
     })
