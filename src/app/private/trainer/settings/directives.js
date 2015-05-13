@@ -41,9 +41,8 @@ angular.module('private.trainer.settings.directives', [
             individual: false
         };
         ctrl.tabs = initTabs();
-            
+
         ctrl.kindsOfSession = ($state.$current.name == "wegas.private.trainer.settings") ? "managed" : "archived";
-        ctrl.isReadonly = (ctrl.kindsOfSession != 'managed');
 
         ctrl.updateSession = function() {
             SessionsModel.getSession(ctrl.kindsOfSession, $stateParams.id, true).then(function(response) {
@@ -121,7 +120,7 @@ angular.module('private.trainer.settings.directives', [
         }
 
         ctrl.save = function() {
-            SessionsModel.updateSession(ctrl.session.id, ctrl.infos).then(function(response){
+            SessionsModel.updateSession(ctrl.session, ctrl.infos).then(function(response){
                 if(!response.isErroneous()){
                     $rootScope.$emit("changeSessions", true);
                     $scope.close();
@@ -163,8 +162,7 @@ angular.module('private.trainer.settings.directives', [
     .directive('trainerSessionsCustomizeInfos', function() {
         return {
             scope:{
-                activeInfos: "=",
-                isReadonly: "="
+                activeInfos: "="
             },
             templateUrl: 'app/private/trainer/settings/directives.tmpl/infos-form.html'
         }
@@ -174,17 +172,10 @@ angular.module('private.trainer.settings.directives', [
             templateUrl: 'app/private/trainer/settings/directives.tmpl/icons-picker.html',
             scope: {
                 activeIcon: "=",
-                change: "=",
-                isReadonly: "="
+                change: "="
             },
             link: function(scope, element, attrs) {
                 scope.icons = Customize.iconsPalette();
-
-                scope.changeIcon = function (key, library) {
-                    if (!scope.isReadonly) {
-                        scope.change(key, library);
-                    }
-                };
             }
         }
     })
@@ -193,17 +184,10 @@ angular.module('private.trainer.settings.directives', [
             templateUrl: 'app/private/trainer/settings/directives.tmpl/colors-picker.html',
             scope: {
                 activeColor: "=",
-                change: "=",
-                isReadonly: "="
+                change: "="
             },
             link: function(scope, element, attrs) {
                 scope.colors = Customize.colorsPalette();
-
-                scope.changeColor = function (color) {
-                    if (!scope.isReadonly) {
-                        scope.change(color);
-                    }
-                };
             }
         }
     })
