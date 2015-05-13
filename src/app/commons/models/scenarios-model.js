@@ -181,7 +181,6 @@ angular.module('wegas.models.scenarios', [])
             /* Update status of scenario (LIVE, BIN, DELETE, SUPPRESSED) */
             setScenarioStatus = function(scenarioId, status) {
                 var deferred = $q.defer();
-
                 $http.put(ServiceURL + "rest/GameModel/" + scenarioId + "/status/" + status + "?view=EditorExtended").success(function(data) {
                     for (var cacheName in scenarios.cache) {
                         scenario = scenarios.findScenario(cacheName, scenarioId);
@@ -453,22 +452,6 @@ angular.module('wegas.models.scenarios', [])
             return deferred.promise;
         };
 
-        model.archiveScenario = function(scenarioToArchive) {
-            var deferred = $q.defer();
-            if (scenarioToArchive["@class"] === "GameModel") {
-                setScenarioStatus(scenarioToArchive.id, "BIN").then(function(scenarioArchived) {
-                    if (scenarioArchived) {
-                        deferred.resolve(Responses.success("Scenario archived", scenarioArchived));
-                    } else {
-                        deferred.resolve(Responses.danger("Error during scenario archivage", false));
-                    }
-                });
-            } else {
-                deferred.resolve(Responses.danger("This is not a scenario", false));
-            }
-            return deferred.promise;
-        };
-
         model.deletePermissions = function(scenarioId, userId) {
             return PermissionModel.deletePermissions(scenarioId, userId);
         }
@@ -659,6 +642,29 @@ angular.module('wegas.models.scenarios', [])
         /*  ---------------------------------
 ARCHIVED SCENARIOS SERVICES
 --------------------------------- */
+        model.countArchivedScenarios = function() {
+            var deferred = $q.defer();
+            $http.get(ServiceURL + "rest/GameModel/status/BIN/count").success(function(data) {
+                deferred.resolve(Responses.success("Number of archived scenarios", data));
+            });
+            return deferred.promise;
+        }
+
+        model.archiveScenario = function(scenarioToArchive) {
+            var deferred = $q.defer();
+            if (scenarioToArchive["@class"] === "GameModel") {
+                setScenarioStatus(scenarioToArchive.id, "BIN").then(function(scenarioArchived) {
+                    if (scenarioArchived) {
+                        deferred.resolve(Responses.success("Scenario archived", scenarioArchived));
+                    } else {
+                        deferred.resolve(Responses.danger("Error during scenario archivage", false));
+                    }
+                });
+            } else {
+                deferred.resolve(Responses.danger("This is not a scenario", false));
+            }
+            return deferred.promise;
+        };
 
         /* Unarchive scenario */
         model.unarchiveScenario = function(scenarioToUnarchive) {
