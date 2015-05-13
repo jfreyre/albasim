@@ -8,6 +8,13 @@
         <div ng-if="!((session.gameModel.comments == null) || (session.gameModel.comments == ''))" class="line line--optionnal">{{session.gameModel.comments | limitTo: 36}}<span ng-if="session.gameModel.comments.length > 36">...</span></div>
     </div>
     <div class="card__actions">
+        <a
+            class="button button--medium button--round button--default-reverse button--label-off button--settings"
+            title="Show settings"
+            ng-click="details(session)">
+            <span class="button__label">Show settings</span>
+        </a>
+
         <a class="button button--medium button--round button--default-reverse button--label-off button--undo" title="Move to current sessions" ng-click="unarchive(session)">
             <span class="button__label">Move to current sessions</span>
         </a>
