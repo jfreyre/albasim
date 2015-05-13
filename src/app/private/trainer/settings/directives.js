@@ -9,7 +9,7 @@ angular.module('private.trainer.settings.directives', [
             templateUrl: 'app/private/trainer/settings/directives.tmpl/index.html',
             controller: "TrainerSettingsIndexController as settingsIndexCtrl"
         };
-    }).controller("TrainerSettingsIndexController", function TrainerSettingsIndexController($rootScope, $scope, $stateParams, SessionsModel, Flash) {
+    }).controller("TrainerSettingsIndexController", function TrainerSettingsIndexController($rootScope, $scope, $state, $stateParams, SessionsModel, Flash) {
         var ctrl = this,
             initTabs = function() {
                 return {
