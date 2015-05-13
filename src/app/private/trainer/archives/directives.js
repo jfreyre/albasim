@@ -10,21 +10,7 @@ angular.module('private.trainer.archives.directives', [])
     }).controller("TrainerArchivesIndexController", function TrainerArchivesIndexController($timeout, $rootScope, $scope, $state, SessionsModel, Flash) {
         var ctrl = this;
         ctrl.archives = [];
-        ctrl.sfilter = {
-            init: false,
-            search : ""
-        };
-        $scope.$watch(function(){
-            return ctrl.sfilter.search;
-        }, function(newSearch){
-            if(ctrl.sfilter.init){
-                $rootScope.$emit("changeSearch", newSearch);
-            }else{
-                ctrl.sfilter.search = $rootScope.search;
-                ctrl.sfilter.init = true;
-            }
-        });
-
+        ctrl.search = "";
 
         ctrl.updateSessions = function() {
             SessionsModel.getSessions("archived").then(function(response) {

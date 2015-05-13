@@ -496,28 +496,23 @@ angular.module('wegas.models.sessions', [])
         };
 
         model.updateSession = function(id, infosToSet) {
-            var deferred = $q.defer(),
-                checkToken = /^[A-Za-z0-9\-]+$/;
+            var deferred = $q.defer();
             if (id && infosToSet) {
                 sessions.findSession("managed", id).then(function(sessionBeforeChange) {
                     if (sessionBeforeChange) {
-                        if (infosToSet.token.match(checkToken)) {
-                            updateGameSession(infosToSet, sessionBeforeChange).then(function(responseGame) {
-                                if (!responseGame.isErroneous()) {
-                                    updateGameModelSession(infosToSet, responseGame.data).then(function(responseGameModel) {
-                                        if (!responseGameModel.isErroneous()) {
-                                            deferred.resolve(Responses.success("Session up-to-date", responseGameModel.data));
-                                        } else {
-                                            deferred.resolve(responseGameModel);
-                                        }
-                                    });
-                                } else {
-                                    deferred.resolve(responseGame);
-                                }
-                            });
-                        } else {
-                            deferred.resolve(Responses.danger("Invalid character in token, only alphanumeric character allowed.", false));
-                        }
+                        updateGameSession(infosToSet, sessionBeforeChange).then(function(responseGame) {
+                            if (!responseGame.isErroneous()) {
+                                updateGameModelSession(infosToSet, responseGame.data).then(function(responseGameModel) {
+                                    if (!responseGameModel.isErroneous()) {
+                                        deferred.resolve(Responses.success("Session up-to-date", responseGameModel.data));
+                                    } else {
+                                        deferred.resolve(responseGameModel);
+                                    }
+                                });
+                            } else {
+                                deferred.resolve(responseGame);
+                            }
+                        });
                     } else {
                         deferred.resolve(Responses.danger("No session to update", false));
                     }
