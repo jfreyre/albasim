@@ -852,13 +852,18 @@ angular.module('wegas.models.sessions', [])
             return deferred.promise;
         };
 
+        /*  ---------------------------------
+    ARCHIVED SESSIONS SERVICES
+    --------------------------------- */
         model.archiveSession = function(sessionToArchive) {
             var deferred = $q.defer();
             if (sessionToArchive["@class"] === "Game") {
                 setSessionStatus(sessionToArchive.id, "BIN").then(function(sessionArchived) {
                     if (sessionArchived) {
                         sessions.cache.managed.data = uncacheSession(sessions.cache.managed.data, sessionToArchive);
-                        sessions.cache.archived.data = cacheSession(sessions.cache.archived.data, sessionToArchive, 1);
+                        if(sessions.cache.archived){
+                            sessions.cache.archived.data = cacheSession(sessions.cache.archived.data, sessionToArchive, 1);
+                        }
                         deferred.resolve(Responses.success("Session archived", sessionToArchive));
                     } else {
                         deferred.resolve(Responses.danger("Error during session archivage", false));
@@ -869,10 +874,6 @@ angular.module('wegas.models.sessions', [])
             }
             return deferred.promise;
         }
-
-        /*  ---------------------------------
-    ARCHIVED SESSIONS SERVICES
-    --------------------------------- */
 
         model.unarchiveSession = function(sessionToUnarchive) {
             var deferred = $q.defer();
@@ -907,6 +908,14 @@ angular.module('wegas.models.sessions', [])
             } else {
                 deferred.resolve(Responses.info("No session archived", true));
             }
+            return deferred.promise;
+        }
+
+        model.countArchivedSessions = function() {
+            var deferred = $q.defer();
+            $http.get(ServiceURL + "rest/GameModel/Game/status/BIN/count").success(function(data) {
+                deferred.resolve(Responses.success("Number of archived sessions", data));
+            });
             return deferred.promise;
         }
 

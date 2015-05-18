@@ -11,7 +11,7 @@ angular.module('private.scenarist.directives', [
                 }
             };
         ctrl.scenarios = [];
-        ctrl.archives = [];
+        ctrl.nbArchives = [];
         ctrl.search = '';
 
         ctrl.maxScenariosDisplayed = null;
@@ -36,13 +36,11 @@ angular.module('private.scenarist.directives', [
             });
         };
         ctrl.updateScenarios = function(updateDisplay) {
-            ScenariosModel.getScenarios('BIN').then(function(response) {
-                if (response.isErroneous()) {
-                    response.flash();
-                } else {
-                    ctrl.archives = response.data || [];
-                }
-            });
+            if(!updateDisplay){
+                ScenariosModel.countArchivedScenarios().then(function(response) {
+                    ctrl.nbArchives = response.data;
+                });
+            }
             ScenariosModel.getScenarios('LIVE').then(function(response) {
                 if (response.isErroneous()) {
                     response.flash();
@@ -85,6 +83,9 @@ angular.module('private.scenarist.directives', [
             }
         });
         ctrl.updateScenarios(true);
+        ScenariosModel.countArchivedScenarios().then(function(response) {
+            ctrl.nbArchives = response.data;
+        });
     })
     .directive('scenaristScenariosIndex', function() {
         return {
@@ -138,7 +139,6 @@ angular.module('private.scenarist.directives', [
             templateUrl: 'app/private/scenarist/directives.tmpl/list.html',
             scope: {
                 scenarios: '=',
-                archives: '=',
                 archive: '=',
                 maximum: '=',
                 search: '='
