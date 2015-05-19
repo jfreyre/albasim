@@ -42,7 +42,7 @@ angular.module('private.trainer.settings.directives', [
         };
         ctrl.tabs = initTabs();
 
-        ctrl.kindsOfSession = ($state.$current.name == "wegas.private.trainer.settings") ? "managed" : "archived";
+        ctrl.kindsOfSession = ($state.$current.name == "wegas.private.trainer.settings") ? "LIVE" : "BIN";
 
         ctrl.updateSession = function() {
             SessionsModel.getSession(ctrl.kindsOfSession, $stateParams.id, true).then(function(response) {
