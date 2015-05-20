@@ -3,11 +3,8 @@ angular.module('wegas.models.permissions', [])
         var model = this;
         model.getSessionPermissions = function(session) {
             var deferred = $q.defer();
-            console.log("JE SUIS LA");
             $http.get(ServiceURL + "rest/Extended/User/FindAccountPermissionByInstance/g" + session.id).success(function(data) {
                 permissionsToReturn = [];
-                console.log("NIET");
-                console.log(data);
                 _(data).each(function(account, i) {
                     var permissions = [],
                         pattern = new RegExp("^Game:(.*):g" + session.id + "$");
