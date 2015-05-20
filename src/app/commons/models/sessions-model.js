@@ -120,6 +120,26 @@ angular.module('wegas.models.sessions', [])
                     scenarioBeforeChange.comments = sessionInfos.comments;
                     gameModelSetted = true;
                 }
+                if (scenarioBeforeChange.properties.scriptUri !== sessionInfos.scriptUri) {
+                    scenarioBeforeChange.properties.scriptUri = sessionInfos.scriptUri;
+                    gameModelSetted = true;
+                }
+                if (scenarioBeforeChange.properties.clientScriptUri !== sessionInfos.clientScriptUri) {
+                    scenarioBeforeChange.properties.clientScriptUri = sessionInfos.clientScriptUri;
+                    gameModelSetted = true;
+                }
+                if (scenarioBeforeChange.properties.cssUri !== sessionInfos.cssUri) {
+                    scenarioBeforeChange.properties.cssUri = sessionInfos.cssUri;
+                    gameModelSetted = true;
+                }
+                if (scenarioBeforeChange.properties.pagesUri !== sessionInfos.pagesUri) {
+                    scenarioBeforeChange.properties.pagesUri = sessionInfos.pagesUri;
+                    gameModelSetted = true;
+                }
+                if (scenarioBeforeChange.properties.logID !== sessionInfos.logID) {
+                    scenarioBeforeChange.properties.logID = sessionInfos.logID;
+                    gameModelSetted = true;
+                }
                 if (gameModelSetted) {
                     $http.put(ServiceURL + "rest/Public/GameModel/" + scenarioBeforeChange.id, scenarioBeforeChange).success(function(data) {
                         deferred.resolve(Responses.success("GameModel updated", data));

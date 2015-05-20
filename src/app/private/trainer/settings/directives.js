@@ -14,7 +14,8 @@ angular.module('private.trainer.settings.directives', [
             initTabs = function() {
                 return {
                     infos: false,
-                    display: false
+                    display: false,
+                    advanced: false
                 }
             };
         ctrl.MAX_DISPLAYED_CHARS = MAX_DISPLAYED_CHARS;
@@ -26,7 +27,12 @@ angular.module('private.trainer.settings.directives', [
             name: false,
             comment: false, 
             token: false,
-            individual: false
+            individual: false,
+            scriptUri: false,
+            clientScriptUri: false,
+            cssUri: false,
+            pagesUri: false,
+            logID: false
         };
         ctrl.infos = {
             name : "",
@@ -38,7 +44,12 @@ angular.module('private.trainer.settings.directives', [
                 library:'fa'
             },
             scenario: "",
-            individual: false
+            individual: false,
+            scriptUri: "",
+            clientScriptUri: "",
+            cssUri: "",
+            pagesUri: "",
+            logID: ""
         };
         ctrl.tabs = initTabs();
 
@@ -63,6 +74,11 @@ angular.module('private.trainer.settings.directives', [
                     ctrl.infos.comments = ctrl.session.gameModel.comments;
                     ctrl.infos.scenario = ctrl.session.gameModel.name;
                     ctrl.infos.individual = ctrl.session.properties.freeForAll; 
+                    ctrl.infos.scriptUri = ctrl.session.gameModel.properties.scriptUri;
+                    ctrl.infos.clientScriptUri = ctrl.session.gameModel.properties.clientScriptUri;
+                    ctrl.infos.cssUri = ctrl.session.gameModel.properties.cssUri;
+                    ctrl.infos.pagesUri = ctrl.session.gameModel.properties.pagesUri;
+                    ctrl.infos.logID = ctrl.session.gameModel.properties.logID;
                }
             });
         };
@@ -96,9 +112,27 @@ angular.module('private.trainer.settings.directives', [
                         break;
                     case "individual": 
                         ctrl.hasChanges.individual = (ctrl.session.properties.freeForAll !==  changes);
-
+                        break;
+                    case "scriptUri":
+                        ctrl.hasChanges.scriptUri = (ctrl.session.gameModel.properties.scriptUri !==  changes);
+                        break;
+                    case "clientScriptUri":
+                        ctrl.hasChanges.clientScriptUri = (ctrl.session.gameModel.properties.clientScriptUri !==  changes);
+                        break;
+                    case "cssUri":
+                        ctrl.hasChanges.cssUri = (ctrl.session.gameModel.properties.cssUri !==  changes);
+                        break;
+                    case "pages":
+                        ctrl.hasChanges.pagesUri = (ctrl.session.gameModel.properties.pagesUri !==  changes);
+                        break;
+                    case "logID":
+                        ctrl.hasChanges.logID = (ctrl.session.gameModel.properties.logID !==  changes);
+                        break;
                 }
-                ctrl.hasChanges.all =   ctrl.hasChanges.color || ctrl.hasChanges.icon || ctrl.hasChanges.name || ctrl.hasChanges.token || ctrl.hasChanges.comments || ctrl.hasChanges.individual;
+                ctrl.hasChanges.all =   ctrl.hasChanges.color || ctrl.hasChanges.icon || ctrl.hasChanges.name 
+                                        || ctrl.hasChanges.token || ctrl.hasChanges.comments || ctrl.hasChanges.individual
+                                        || ctrl.hasChanges.scriptUri || ctrl.hasChanges.clientScriptUri || ctrl.hasChanges.cssUri 
+                                        || ctrl.hasChanges.pagesUri || ctrl.hasChanges.logID;
             }
         };
 
@@ -156,6 +190,36 @@ angular.module('private.trainer.settings.directives', [
             ctrl.checkChanges("individual", newIndividual);
         });
 
+        $scope.$watch(function(){
+            return ctrl.infos.scriptUri;
+        }, function(newScriptUri){
+            ctrl.checkChanges("scriptUri", newScriptUri);
+        });
+
+        $scope.$watch(function(){
+            return ctrl.infos.clientScriptUri;
+        }, function(newClientScriptUri){
+            ctrl.checkChanges("clientScriptUri", newClientScriptUri);
+        });
+
+        $scope.$watch(function(){
+            return ctrl.infos.cssUri;
+        }, function(newCssUri){
+            ctrl.checkChanges("cssUri", newCssUri);
+        });
+        
+        $scope.$watch(function(){
+            return ctrl.infos.pagesUri;
+        }, function(newPagesUri){
+            ctrl.checkChanges("pagesUri", newPagesUri);
+        });
+
+        $scope.$watch(function(){
+            return ctrl.infos.logID;
+        }, function(newLogID){
+            ctrl.checkChanges("logID", newLogID);
+        });
+
         ctrl.updateSession();
         ctrl.activeTab("infos");
     })
@@ -165,6 +229,14 @@ angular.module('private.trainer.settings.directives', [
                 activeInfos: "="
             },
             templateUrl: 'app/private/trainer/settings/directives.tmpl/infos-form.html'
+        }
+    })
+    .directive('trainerSessionsCustomizeAdvanced', function() {
+        return {
+            scope:{
+                activeInfos: "="
+            },
+            templateUrl: 'app/private/trainer/settings/directives.tmpl/infos-advanced.html'
         }
     })
     .directive('trainerSessionsCustomizeIcons', function(Customize) {

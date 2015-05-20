@@ -141,6 +141,10 @@ angular.module('wegas.models.scenarios', [])
                 scenarioBeforeChange.properties.pagesUri = infos.pagesUri;
                 scenarioSetted = true;
             }
+            if (scenarioBeforeChange.properties.logID !== infos.logID) {
+                scenarioBeforeChange.properties.logID = infos.logID;
+                scenarioSetted = true;
+            }
 
 
             if (scenarioSetted) {
