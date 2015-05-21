@@ -186,8 +186,14 @@ angular.module('private.trainer.settings.directives', [
             scope:{
                 activeInfos: "="
             },
-            templateUrl: 'app/private/trainer/settings/directives.tmpl/infos-form.html'
-        }
+            templateUrl: 'app/private/trainer/settings/directives.tmpl/infos-form.html',
+            link: function(scope, elem, attrs){
+                $(".link--selector").on("click", function(e){
+                    e.stopPropagation();
+                    $(".tool--selectable").trigger("click");
+                });
+            }
+        };
     })
     .directive('trainerSessionsCustomizeAdvanced', function() {
         return {
