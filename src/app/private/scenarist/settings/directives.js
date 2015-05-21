@@ -29,7 +29,8 @@ angular.module('private.scenarist.settings.directives', [
             scriptUri: false,
             clientScriptUri: false,
             cssUri: false,
-            pagesUri: false
+            pagesUri: false,
+            logID: false
         };
         ctrl.infos = {
             name : "",
@@ -43,7 +44,8 @@ angular.module('private.scenarist.settings.directives', [
             scriptUri: "",
             clientScriptUri: "",
             cssUri: "",
-            pagesUri: ""
+            pagesUri: "",
+            logID: ""
         };
         ctrl.tabs = initTabs();
 
@@ -68,7 +70,7 @@ angular.module('private.scenarist.settings.directives', [
                     ctrl.infos.clientScriptUri = ctrl.scenario.properties.clientScriptUri;
                     ctrl.infos.cssUri = ctrl.scenario.properties.cssUri;
                     ctrl.infos.pagesUri = ctrl.scenario.properties.pagesUri;
-
+                    ctrl.infos.logID = ctrl.scenario.properties.logID;
                }
             });
         };
@@ -112,13 +114,16 @@ angular.module('private.scenarist.settings.directives', [
                     case "pages":
                         ctrl.hasChanges.pagesUri = (ctrl.scenario.properties.pagesUri !==  changes);
                         break;
+                    case "logID":
+                        ctrl.hasChanges.logID = (ctrl.scenario.properties.logID !==  changes);
+                        break;
 
                 }
                 ctrl.hasChanges.all = ctrl.hasChanges.color || ctrl.hasChanges.icon ||
                                     ctrl.hasChanges.name || ctrl.hasChanges.comments ||
                                     ctrl.hasChanges.individual || ctrl.hasChanges.scriptUri ||
                                     ctrl.hasChanges.clientScriptUri || ctrl.hasChanges.cssUri ||
-                                    ctrl.hasChanges.pagesUri;
+                                    ctrl.hasChanges.pagesUri || ctrl.hasChanges.logID;
             }
         };
 
@@ -154,44 +159,16 @@ angular.module('private.scenarist.settings.directives', [
             $scope.close();
         };
 
-        $scope.$watch(function(){
-            return ctrl.infos.name;
-        }, function(newName){
-            ctrl.checkChanges("name", newName);
-        });
+        var properties = ["name","comments","individual","scriptUri","clientScriptUri","cssUri","pagesUri","logID"];
 
-        $scope.$watch(function(){
-            return ctrl.infos.comments;
-        }, function(newComments){
-            ctrl.checkChanges("comments", newComments);
+        _.each(properties, function(el, index) {
+            $scope.$watch(function() {
+                return ctrl.infos[el];
+            }, function(newValue) {
+                ctrl.checkChanges(el, newValue)
+            })
         });
-
-        $scope.$watch(function(){
-            return ctrl.infos.individual;
-        }, function(newIndividual){
-            ctrl.checkChanges("individual", newIndividual);
-        });
-
-        $scope.$watch(function(){
-            return ctrl.infos.scriptUri;
-        }, function(newScriptUri){
-            ctrl.checkChanges("scriptUri", newScriptUri);
-        });
-        $scope.$watch(function(){
-            return ctrl.infos.clientScriptUri;
-        }, function(newClientScriptUri){
-            ctrl.checkChanges("clientScriptUri", newClientScriptUri);
-        });
-        $scope.$watch(function(){
-            return ctrl.infos.cssUri;
-        }, function(newCssUri){
-            ctrl.checkChanges("cssUri", newCssUri);
-        });
-        $scope.$watch(function(){
-            return ctrl.infos.pagesUri;
-        }, function(newPagesUri){
-            ctrl.checkChanges("pagesUri", newPagesUri);
-        });
+        
         ctrl.updateScenario();
         ctrl.activeTab("infos");
     })

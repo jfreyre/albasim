@@ -13,7 +13,7 @@ angular.module('private.trainer.archives.directives', [])
         ctrl.search = "";
 
         ctrl.updateSessions = function() {
-            SessionsModel.getSessions("archived").then(function(response) {
+            SessionsModel.getSessions("BIN").then(function(response) {
                 ctrl.archives = response.data || {};
                 if (response.isErroneous()) {
                     response.flash();
