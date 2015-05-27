@@ -2,7 +2,9 @@
 angular.module('wegas.behaviours.modals', [])
 .controller('ModalsController', function ModalsController($animate, close) {
     var modalsCtrl = this;
+
     modalsCtrl.close = function() {
+        alert('kkk');
         var box = $(".modal"),
             shadow = $(".shadow");
         $animate.removeClass(shadow, "shadow--show");
