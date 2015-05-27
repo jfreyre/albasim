@@ -14,7 +14,8 @@ angular.module('private.trainer.settings.directives', [
             initTabs = function() {
                 return {
                     infos: false,
-                    display: false
+                    display: false,
+                    advanced: false
                 }
             };
         ctrl.MAX_DISPLAYED_CHARS = MAX_DISPLAYED_CHARS;
@@ -26,7 +27,12 @@ angular.module('private.trainer.settings.directives', [
             name: false,
             comment: false, 
             token: false,
-            individual: false
+            individual: false,
+            scriptUri: false,
+            clientScriptUri: false,
+            cssUri: false,
+            pagesUri: false,
+            logID: false
         };
         ctrl.infos = {
             name : "",
@@ -38,11 +44,16 @@ angular.module('private.trainer.settings.directives', [
                 library:'fa'
             },
             scenario: "",
-            individual: false
+            individual: false,
+            scriptUri: "",
+            clientScriptUri: "",
+            cssUri: "",
+            pagesUri: "",
+            logID: ""
         };
         ctrl.tabs = initTabs();
 
-        ctrl.kindsOfSession = ($state.$current.name == "wegas.private.trainer.settings") ? "managed" : "archived";
+        ctrl.kindsOfSession = ($state.$current.name == "wegas.private.trainer.settings") ? "LIVE" : "BIN";
 
         ctrl.updateSession = function() {
             SessionsModel.getSession(ctrl.kindsOfSession, $stateParams.id, true).then(function(response) {
@@ -63,6 +74,11 @@ angular.module('private.trainer.settings.directives', [
                     ctrl.infos.comments = ctrl.session.gameModel.comments;
                     ctrl.infos.scenario = ctrl.session.gameModel.name;
                     ctrl.infos.individual = ctrl.session.properties.freeForAll; 
+                    ctrl.infos.scriptUri = ctrl.session.gameModel.properties.scriptUri;
+                    ctrl.infos.clientScriptUri = ctrl.session.gameModel.properties.clientScriptUri;
+                    ctrl.infos.cssUri = ctrl.session.gameModel.properties.cssUri;
+                    ctrl.infos.pagesUri = ctrl.session.gameModel.properties.pagesUri;
+                    ctrl.infos.logID = ctrl.session.gameModel.properties.logID;
                }
             });
         };
@@ -96,9 +112,27 @@ angular.module('private.trainer.settings.directives', [
                         break;
                     case "individual": 
                         ctrl.hasChanges.individual = (ctrl.session.properties.freeForAll !==  changes);
-
+                        break;
+                    case "scriptUri":
+                        ctrl.hasChanges.scriptUri = (ctrl.session.gameModel.properties.scriptUri !==  changes);
+                        break;
+                    case "clientScriptUri":
+                        ctrl.hasChanges.clientScriptUri = (ctrl.session.gameModel.properties.clientScriptUri !==  changes);
+                        break;
+                    case "cssUri":
+                        ctrl.hasChanges.cssUri = (ctrl.session.gameModel.properties.cssUri !==  changes);
+                        break;
+                    case "pages":
+                        ctrl.hasChanges.pagesUri = (ctrl.session.gameModel.properties.pagesUri !==  changes);
+                        break;
+                    case "logID":
+                        ctrl.hasChanges.logID = (ctrl.session.gameModel.properties.logID !==  changes);
+                        break;
                 }
-                ctrl.hasChanges.all =   ctrl.hasChanges.color || ctrl.hasChanges.icon || ctrl.hasChanges.name || ctrl.hasChanges.token || ctrl.hasChanges.comments || ctrl.hasChanges.individual;
+                ctrl.hasChanges.all =   ctrl.hasChanges.color || ctrl.hasChanges.icon || ctrl.hasChanges.name 
+                                        || ctrl.hasChanges.token || ctrl.hasChanges.comments || ctrl.hasChanges.individual
+                                        || ctrl.hasChanges.scriptUri || ctrl.hasChanges.clientScriptUri || ctrl.hasChanges.cssUri 
+                                        || ctrl.hasChanges.pagesUri || ctrl.hasChanges.logID;
             }
         };
 
@@ -133,27 +167,15 @@ angular.module('private.trainer.settings.directives', [
         ctrl.cancel = function(){
             $scope.close();
         };
-        $scope.$watch(function(){
-            return ctrl.infos.name;
-        }, function(newName){
-            ctrl.checkChanges("name", newName);
-        });
 
-        $scope.$watch(function(){
-            return ctrl.infos.token;
-        }, function(newToken){
-            ctrl.checkChanges("token", newToken);
-        });
+        var properties = ["name","comments","individual","scriptUri","clientScriptUri","cssUri","pagesUri","logID"];
 
-        $scope.$watch(function(){
-            return ctrl.infos.comments;
-        }, function(newComments){
-            ctrl.checkChanges("comments", newComments);
-        });
-        $scope.$watch(function(){
-            return ctrl.infos.individual;
-        }, function(newIndividual){
-            ctrl.checkChanges("individual", newIndividual);
+        _.each(properties, function(el, index) {
+            $scope.$watch(function() {
+                return ctrl.infos[el];
+            }, function(newValue) {
+                ctrl.checkChanges(el, newValue)
+            })
         });
 
         ctrl.updateSession();
@@ -164,7 +186,21 @@ angular.module('private.trainer.settings.directives', [
             scope:{
                 activeInfos: "="
             },
-            templateUrl: 'app/private/trainer/settings/directives.tmpl/infos-form.html'
+            templateUrl: 'app/private/trainer/settings/directives.tmpl/infos-form.html',
+            link: function(scope, elem, attrs){
+                $(".link--selector").on("click", function(e){
+                    e.stopPropagation();
+                    $(".tool--selectable").trigger("click");
+                });
+            }
+        };
+    })
+    .directive('trainerSessionsCustomizeAdvanced', function() {
+        return {
+            scope:{
+                activeInfos: "="
+            },
+            templateUrl: 'app/private/trainer/settings/directives.tmpl/infos-advanced.html'
         }
     })
     .directive('trainerSessionsCustomizeIcons', function(Customize) {

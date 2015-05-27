@@ -36,7 +36,7 @@ angular.module('private.trainer.directives', [
         ctrl.updateSessions = function(updateDisplay) {
             ctrl.sessions = [];
             ctrl.loading = true;
-            SessionsModel.getSessions("managed").then(function(response) {
+            SessionsModel.getSessions("LIVE").then(function(response) {
                 ctrl.loading = false;
                 ctrl.sessions = response.data || [];
                 if (updateDisplay) {
@@ -77,15 +77,15 @@ angular.module('private.trainer.directives', [
 
         $rootScope.$on('changeArchives', function(e, hasNewData) {
             if (hasNewData) {
-                SessionsModel.getSessions("archived").then(function(response) {
-                    ctrl.archives = response.data || [];
+                SessionsModel.countArchivedSessions().then(function(response) {
+                    ctrl.nbArchives = response.data;
                 });
             }
         });
 
         $rootScope.$on('changeSessions', function(e, hasNewData) {
             if (hasNewData) {
-                SessionsModel.getSessions("managed").then(function(response) {
+                SessionsModel.getSessions("LIVE").then(function(response) {
                     ctrl.sessions = response.data || [];
                 });
             }
