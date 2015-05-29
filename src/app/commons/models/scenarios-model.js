@@ -305,7 +305,7 @@ angular.module('wegas.models.scenarios', [])
 
         model.createFromJSON = function(file) {
             var deferred = $q.defer(),
-                url = "rest/Extended/GameModel",
+                url = "rest/EditorExtended/GameModel",
                 fd = new FormData();
 
 
